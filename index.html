@@ -51,6 +51,20 @@
             display: none;
         }
 
+        .settings-btn {
+            position: absolute;
+            right: 0;
+            top: 5px;
+            background: transparent;
+            border: none;
+            color: #8a8f98;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .settings-btn:hover { color: #fff; }
+
         .brand-wrapper {
             display: flex;
             align-items: center;
@@ -77,18 +91,16 @@
             color: #8a8f98;
         }
 
-        /* VISTE (HOME E DETTAGLI) */
+        /* VISTE SCHERMATE */
         .view {
             display: flex;
             flex-direction: column;
             gap: 32px;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* SCHEDE DI SELEZIONE PROFILO (HOME) */
+        /* GRIGLIA HOME */
         .profile-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -123,104 +135,43 @@
             justify-content: center;
         }
 
-        .profile-icon svg {
-            width: 24px;
-            height: 24px;
-        }
+        .profile-icon svg { width: 24px; height: 24px; }
+        .profile-title { font-size: 16px; font-weight: 600; color: #ffffff; }
 
-        .profile-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
-        }
+        /* COLORI PROFILI */
+        .p-biz { border-color: rgba(255, 159, 67, 0.2); } .p-biz .profile-icon { background: rgba(255, 159, 67, 0.1); fill: #ff9f43; } .p-biz:hover { border-color: #ff9f43; }
+        .p-student { border-color: rgba(52, 152, 219, 0.2); } .p-student .profile-icon { background: rgba(52, 152, 219, 0.1); fill: #3498db; } .p-student:hover { border-color: #3498db; }
+        .p-home { border-color: rgba(46, 204, 113, 0.2); } .p-home .profile-icon { background: rgba(46, 204, 113, 0.1); fill: #2ecc71; } .p-home:hover { border-color: #2ecc71; }
+        .p-mom { border-color: rgba(233, 30, 99, 0.2); } .p-mom .profile-icon { background: rgba(233, 30, 99, 0.1); fill: #e91e63; } .p-mom:hover { border-color: #e91e63; }
+        .p-health { border-color: rgba(155, 89, 182, 0.2); } .p-health .profile-icon { background: rgba(155, 89, 182, 0.1); fill: #9b59b6; } .p-health:hover { border-color: #9b59b6; }
+        .p-general { border-color: rgba(26, 188, 156, 0.2); } .p-general .profile-icon { background: rgba(26, 188, 156, 0.1); fill: #1abc9c; } .p-general:hover { border-color: #1abc9c; }
 
-        /* COLORI DEI 6 PROFILI */
-        .p-biz { border-color: rgba(255, 159, 67, 0.2); }
-        .p-biz .profile-icon { background: rgba(255, 159, 67, 0.1); fill: #ff9f43; }
-        .p-biz:hover { border-color: #ff9f43; }
+        /* STRUMENTI INTERNI */
+        .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #8a8f98; margin-bottom: 16px; }
+        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tool-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; cursor: pointer; transition: all 0.2s; text-align: left; }
+        .tool-card:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
+        .tool-icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .tool-icon-box svg { width: 20px; height: 20px; }
+        .tool-text { font-size: 15px; font-weight: 500; color: #e5e7eb; line-height: 1.4; }
 
-        .p-student { border-color: rgba(52, 152, 219, 0.2); }
-        .p-student .profile-icon { background: rgba(52, 152, 219, 0.1); fill: #3498db; }
-        .p-student:hover { border-color: #3498db; }
+        /* AREA CHAT INTERFACCIA */
+        .chat-container { display: flex; flex-direction: column; gap: 20px; }
+        .chat-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; min-height: 200px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 16px; border-radius: 12px; max-width: 85%; font-size: 15px; line-height: 1.5; }
+        .msg-user { background: rgba(255,255,255,0.08); align-self: flex-end; color: #fff; }
+        .msg-nova { background: rgba(255, 159, 67, 0.1); border: 1px solid rgba(255, 159, 67, 0.15); align-self: flex-start; color: #f3f4f6; }
+        
+        .input-wrapper { display: flex; gap: 10px; width: 100%; }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; color: #fff; font-size: 15px; outline: none; }
+        .chat-input:focus { border-color: rgba(255, 159, 67, 0.5); }
+        .send-btn { background: #ff9f43; border: none; color: #0d0e12; padding: 0 24px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .send-btn:hover { background: #ffb366; }
 
-        .p-home { border-color: rgba(46, 204, 113, 0.2); }
-        .p-home .profile-icon { background: rgba(46, 204, 113, 0.1); fill: #2ecc71; }
-        .p-home:hover { border-color: #2ecc71; }
+        /* SCHERMATA CHIAVE API */
+        .api-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
 
-        .p-mom { border-color: rgba(233, 30, 99, 0.2); }
-        .p-mom .profile-icon { background: rgba(233, 30, 99, 0.1); fill: #e91e63; }
-        .p-mom:hover { border-color: #e91e63; }
-
-        .p-health { border-color: rgba(155, 89, 182, 0.2); }
-        .p-health .profile-icon { background: rgba(155, 89, 182, 0.1); fill: #9b59b6; }
-        .p-health:hover { border-color: #9b59b6; }
-
-        .p-general { border-color: rgba(26, 188, 156, 0.2); }
-        .p-general .profile-icon { background: rgba(26, 188, 156, 0.1); fill: #1abc9c; }
-        .p-general:hover { border-color: #1abc9c; }
-
-        /* GRIGLIA STRUMENTI INTERNI */
-        .section-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #8a8f98;
-            margin-bottom: 16px;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .tool-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: left;
-        }
-
-        .tool-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-2px);
-        }
-
-        .tool-icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tool-icon-box svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .tool-text {
-            font-size: 15px;
-            font-weight: 500;
-            color: #e5e7eb;
-            line-height: 1.4;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 500px) {
-            .profile-grid, .tools-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 500px) { .profile-grid, .tools-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -229,6 +180,7 @@
         
         <header>
             <button class="back-btn" id="backBtn" onclick="goBack()">← Indietro</button>
+            <button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙️</button>
             <div class="brand-wrapper">
                 <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2L22 11.6l-5.6 4.4L18.4 22 12 17.6 5.6 22l2-6-5.6-4.4 7.6-2.4z"/></svg>
                 <h1 class="brand-name">Nova</h1>
@@ -236,7 +188,7 @@
             <p class="tagline" id="appTagline">Scegli il tuo profilo per iniziare</p>
         </header>
 
-        <!-- VISTA 1: SELEZIONE PROFILO (6 PROFILI COMPLETI) -->
+        <!-- VISTA 1: HOME PROFILI -->
         <div id="homeView" class="view">
             <div class="profile-grid">
                 <div class="profile-card p-biz" onclick="openCategory('business')">
@@ -261,26 +213,3 @@
                 </div>
                 <div class="profile-card p-general" onclick="openCategory('general')">
                     <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
-                    <span class="profile-title">Tutto il resto (Generale)</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- VISTA 2: STRUMENTI DELLA CATEGORIA SELEZIONATA -->
-        <div id="categoryView" class="view hidden">
-            <h3 class="section-title" id="categoryTitle">Strumenti disponibili</h3>
-            <div class="tools-grid" id="toolsContainer">
-                <!-- Inseriti via JavaScript -->
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        const data = {
-            business: {
-                tagline: "Strumenti di intelligenza artificiale per il tuo business",
-                color: "#ff9f43",
-                bg: "rgba(255, 159, 67, 0.1)",
-                tools: [
-                    { text: "Preventivo per un cliente", icon: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z", action: "biz-preventivo" },
