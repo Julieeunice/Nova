@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova — Il tuo assistente AI</title>
+<title>Nova — Your AI Assistant</title>
 <link rel="icon" type="image/png" href="favicon-32.png">
 <style>
   :root {
@@ -27,14 +27,19 @@
   .reset-btn { margin-left: auto; background: none; border: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; padding: 6px 10px; border-radius: 8px; }
   .reset-btn:active { background: var(--bg-elevated); }
   #messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 20px; padding: 20px; }
-  .empty-state .big-avatar { width: 72px; height: 72px; border-radius: 20px; background: radial-gradient(circle at 50% 50%, var(--accent-glow), transparent 70%), var(--bg-elevated); display: flex; align-items: center; justify-content: center; }
-  .empty-state .big-avatar svg { width: 36px; height: 36px; fill: var(--accent); }
-  .empty-state h2 { font-size: 22px; font-weight: 700; }
-  .empty-state p { color: var(--text-secondary); font-size: 14px; max-width: 280px; line-height: 1.5; }
-  .suggestions { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 8px; }
-  .suggestion-chip { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-primary); padding: 12px 16px; border-radius: 12px; font-size: 14px; text-align: left; cursor: pointer; transition: border-color 0.15s; }
-  .suggestion-chip:active { border-color: var(--accent); }
+  .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; gap: 18px; padding: 20px 20px 8px; overflow-y: auto; }
+  .empty-state .big-avatar { width: 64px; height: 64px; border-radius: 18px; background: radial-gradient(circle at 50% 50%, var(--accent-glow), transparent 70%), var(--bg-elevated); display: flex; align-items: center; justify-content: center; margin-top: 8px; }
+  .empty-state .big-avatar svg { width: 32px; height: 32px; fill: var(--accent); }
+  .empty-state h2 { font-size: 20px; font-weight: 700; }
+  .empty-state p { color: var(--text-secondary); font-size: 13.5px; max-width: 300px; line-height: 1.5; }
+  .tools-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); width: 100%; text-align: left; margin-top: 6px; }
+  .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+  .tool-card { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-primary); padding: 14px 12px; border-radius: 14px; text-align: left; cursor: pointer; transition: border-color 0.15s; display: flex; flex-direction: column; gap: 6px; }
+  .tool-card:active { border-color: var(--accent); }
+  .tool-card .tool-icon { font-size: 20px; }
+  .tool-card .tool-title { font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .suggestions { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 4px; }
+  .suggestion-chip { background: none; border: 1px solid var(--border); color: var(--text-secondary); padding: 9px 14px; border-radius: 10px; font-size: 12.5px; text-align: left; cursor: pointer; }
   .msg-wrap { display: flex; flex-direction: column; max-width: 85%; animation: fadeIn 0.2s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   .msg-wrap.user { align-self: flex-end; align-items: flex-end; }
@@ -69,7 +74,6 @@
   .disclaimer { text-align: center; font-size: 10.5px; color: var(--text-secondary); padding: 6px 0 0; }
   .quota-badge { text-align: center; font-size: 11px; color: var(--text-secondary); padding: 4px 0 0; }
   .quota-badge.low { color: var(--accent); }
-  .char-badge { text-align: center; font-size: 10px; color: var(--text-secondary); padding-top: 2px; }
   .limit-banner { background: var(--bubble-nova); border: 1px solid var(--accent); border-radius: 12px; padding: 14px 16px; margin: 0 20px 12px; font-size: 13.5px; line-height: 1.5; text-align: center; display: none; }
   .limit-banner.show { display: block; }
   #messages::-webkit-scrollbar { width: 4px; }
@@ -85,39 +89,222 @@
     </div>
     <div class="header-text">
       <h1>Nova</h1>
-      <p>Assistente AI · in tempo reale</p>
+      <p id="header-subtitle"></p>
     </div>
-    <button class="reset-btn" id="reset-btn">Nuova chat</button>
+    <button class="reset-btn" id="reset-btn"></button>
   </header>
 
   <div id="messages"></div>
 
-  <div class="limit-banner" id="limit-banner">
-    Hai raggiunto il limite di messaggi gratuiti per oggi. Torna domani, oppure passa a Nova Plus per messaggi illimitati.
-  </div>
+  <div class="limit-banner" id="limit-banner"></div>
 
   <div id="input-bar">
-    <textarea id="text-input" placeholder="Scrivi un messaggio..." rows="1" maxlength="4000"></textarea>
-    <button id="send-btn" aria-label="Invia">
+    <textarea id="text-input" rows="1" maxlength="4000"></textarea>
+    <button id="send-btn" aria-label="Send">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
     </button>
   </div>
   <div class="quota-badge" id="quota-badge"></div>
-  <div class="disclaimer" style="padding-bottom: 8px;">Nova può commettere errori — verifica le informazioni importanti.</div>
+  <div class="disclaimer" id="disclaimer" style="padding-bottom: 8px;"></div>
 </div>
 
 <script>
-const SUGGESTIONS = [
-  "Scrivimi un'email professionale",
-  "Dammi 5 idee su un argomento",
-  "Spiegami qualcosa in modo semplice",
-  "Riassumi un testo per me"
-];
+// ---------- i18n ----------
+const TRANSLATIONS = {
+  en: {
+    subtitle: "For people who run their own business",
+    newChat: "New chat",
+    placeholder: "Write a message...",
+    send: "Send",
+    disclaimer: "Nova can make mistakes — check important information.",
+    quotaRemaining: (n) => `${n} free message${n === 1 ? '' : 's'} left today`,
+    limitReached: "You've reached today's free message limit. Come back tomorrow, or upgrade to Nova Plus for unlimited messages.",
+    limitPlaceholder: "Daily limit reached",
+    greetingTitle: "Hi, I'm Nova.",
+    greetingBody: "The assistant built for people who run a business: no complicated prompts, just the tools you use every day.",
+    toolsLabel: "What do you need today?",
+    orLabel: "Or",
+    copy: "Copy",
+    copied: "Copied!",
+    errorGeneric: "Something went wrong generating a reply. Please try again.",
+    errorRate: "Nova is receiving too many requests right now. Try again in a few seconds.",
+    errorAuth: "The service isn't configured correctly yet. Please try again later.",
+    errorServer: "Nova's service is currently unavailable. Please try again soon.",
+    errorConnection: "A connection error occurred. Check your network and try again.",
+    fallbackReply: "Sorry, I couldn't generate a reply. Please try again.",
+    tools: [
+      { icon: "📄", title: "Quote for a client", text: "Help me write a professional quote for a client. Ask me what you need to know (service, price, timeline)." },
+      { icon: "😤", title: "Reply to an unhappy client", text: "I need to reply to an unhappy client, calmly and professionally. Ask me what happened and help me write the reply." },
+      { icon: "💰", title: "Payment reminder", text: "Help me write a friendly but firm payment reminder for an unpaid invoice. Ask me for the details you need." },
+      { icon: "📱", title: "Social media post", text: "Help me write a social media post to promote my business. Ask me what it's about and which platform." },
+    ],
+    suggestions: ["Write me a professional email", "Summarize a text for me", "Explain something simply"],
+  },
+  it: {
+    subtitle: "Per chi manda avanti la propria attività",
+    newChat: "Nuova chat",
+    placeholder: "Scrivi un messaggio...",
+    send: "Invia",
+    disclaimer: "Nova può commettere errori — verifica le informazioni importanti.",
+    quotaRemaining: (n) => `${n} messagg${n === 1 ? 'io' : 'i'} gratuiti rimasti oggi`,
+    limitReached: "Hai raggiunto il limite di messaggi gratuiti per oggi. Torna domani, oppure passa a Nova Plus per messaggi illimitati.",
+    limitPlaceholder: "Limite giornaliero raggiunto",
+    greetingTitle: "Ciao, sono Nova.",
+    greetingBody: "L'assistente pensato per chi manda avanti un'attività: niente prompt complicati, solo gli strumenti che usi ogni giorno.",
+    toolsLabel: "Cosa devi fare oggi?",
+    orLabel: "Oppure",
+    copy: "Copia",
+    copied: "Copiato!",
+    errorGeneric: "Si è verificato un problema nella generazione della risposta. Riprova.",
+    errorRate: "Nova sta ricevendo troppe richieste in questo momento. Riprova tra qualche secondo.",
+    errorAuth: "Il servizio non è ancora configurato correttamente. Riprova più tardi.",
+    errorServer: "Il servizio di Nova non è al momento disponibile. Riprova tra poco.",
+    errorConnection: "Si è verificato un errore di connessione. Controlla la rete e riprova.",
+    fallbackReply: "Scusa, non sono riuscita a rispondere. Riprova.",
+    tools: [
+      { icon: "📄", title: "Preventivo per un cliente", text: "Aiutami a scrivere un preventivo professionale. Fammi le domande che ti servono per prepararlo (servizio, prezzo, tempi)." },
+      { icon: "😤", title: "Rispondere a un cliente scontento", text: "Devo rispondere a un cliente insoddisfatto in modo professionale e calmo. Chiedimi cosa è successo e aiutami a scrivere la risposta." },
+      { icon: "💰", title: "Sollecito di pagamento", text: "Aiutami a scrivere un sollecito di pagamento gentile ma fermo per una fattura non ancora saldata. Chiedimi i dettagli necessari." },
+      { icon: "📱", title: "Post per i social", text: "Aiutami a scrivere un post per promuovere la mia attività sui social. Chiedimi di cosa si tratta e per quale piattaforma." },
+    ],
+    suggestions: ["Scrivimi un'email professionale", "Riassumi un testo per me", "Spiegami qualcosa in modo semplice"],
+  },
+  es: {
+    subtitle: "Para quienes llevan su propio negocio",
+    newChat: "Nuevo chat",
+    placeholder: "Escribe un mensaje...",
+    send: "Enviar",
+    disclaimer: "Nova puede cometer errores — verifica la información importante.",
+    quotaRemaining: (n) => `${n} mensaje${n === 1 ? '' : 's'} gratis restante${n === 1 ? '' : 's'} hoy`,
+    limitReached: "Has alcanzado el límite de mensajes gratuitos de hoy. Vuelve mañana, o pasa a Nova Plus para mensajes ilimitados.",
+    limitPlaceholder: "Límite diario alcanzado",
+    greetingTitle: "Hola, soy Nova.",
+    greetingBody: "El asistente pensado para quienes llevan un negocio: sin prompts complicados, solo las herramientas que usas cada día.",
+    toolsLabel: "¿Qué necesitas hoy?",
+    orLabel: "O bien",
+    copy: "Copiar",
+    copied: "¡Copiado!",
+    errorGeneric: "Ocurrió un problema al generar la respuesta. Inténtalo de nuevo.",
+    errorRate: "Nova está recibiendo demasiadas solicitudes ahora mismo. Inténtalo de nuevo en unos segundos.",
+    errorAuth: "El servicio aún no está configurado correctamente. Inténtalo más tarde.",
+    errorServer: "El servicio de Nova no está disponible en este momento. Inténtalo pronto.",
+    errorConnection: "Ocurrió un error de conexión. Revisa tu red e inténtalo de nuevo.",
+    fallbackReply: "Lo siento, no pude generar una respuesta. Inténtalo de nuevo.",
+    tools: [
+      { icon: "📄", title: "Presupuesto para un cliente", text: "Ayúdame a escribir un presupuesto profesional. Hazme las preguntas que necesites (servicio, precio, plazos)." },
+      { icon: "😤", title: "Responder a un cliente descontento", text: "Necesito responder a un cliente insatisfecho de forma profesional y calmada. Pregúntame qué pasó y ayúdame a escribir la respuesta." },
+      { icon: "💰", title: "Recordatorio de pago", text: "Ayúdame a escribir un recordatorio de pago amable pero firme para una factura pendiente. Pregúntame los detalles que necesites." },
+      { icon: "📱", title: "Publicación para redes sociales", text: "Ayúdame a escribir una publicación para promocionar mi negocio en redes sociales. Pregúntame de qué se trata y en qué plataforma." },
+    ],
+    suggestions: ["Escríbeme un correo profesional", "Resúmeme un texto", "Explícame algo de forma sencilla"],
+  },
+  fr: {
+    subtitle: "Pour ceux qui gèrent leur propre activité",
+    newChat: "Nouvelle discussion",
+    placeholder: "Écrivez un message...",
+    send: "Envoyer",
+    disclaimer: "Nova peut faire des erreurs — vérifiez les informations importantes.",
+    quotaRemaining: (n) => `${n} message${n === 1 ? '' : 's'} gratuit${n === 1 ? '' : 's'} restant${n === 1 ? '' : 's'} aujourd'hui`,
+    limitReached: "Vous avez atteint la limite de messages gratuits pour aujourd'hui. Revenez demain, ou passez à Nova Plus pour des messages illimités.",
+    limitPlaceholder: "Limite quotidienne atteinte",
+    greetingTitle: "Bonjour, je suis Nova.",
+    greetingBody: "L'assistant conçu pour ceux qui gèrent une activité : pas de prompts compliqués, juste les outils que vous utilisez au quotidien.",
+    toolsLabel: "De quoi avez-vous besoin aujourd'hui ?",
+    orLabel: "Ou bien",
+    copy: "Copier",
+    copied: "Copié !",
+    errorGeneric: "Un problème est survenu lors de la génération de la réponse. Réessayez.",
+    errorRate: "Nova reçoit trop de requêtes en ce moment. Réessayez dans quelques secondes.",
+    errorAuth: "Le service n'est pas encore configuré correctement. Réessayez plus tard.",
+    errorServer: "Le service de Nova est actuellement indisponible. Réessayez bientôt.",
+    errorConnection: "Une erreur de connexion s'est produite. Vérifiez votre réseau et réessayez.",
+    fallbackReply: "Désolée, je n'ai pas pu générer de réponse. Réessayez.",
+    tools: [
+      { icon: "📄", title: "Devis pour un client", text: "Aide-moi à rédiger un devis professionnel. Pose-moi les questions nécessaires (service, prix, délais)." },
+      { icon: "😤", title: "Répondre à un client mécontent", text: "Je dois répondre à un client insatisfait, calmement et professionnellement. Demande-moi ce qui s'est passé et aide-moi à rédiger la réponse." },
+      { icon: "💰", title: "Relance de paiement", text: "Aide-moi à rédiger une relance de paiement courtoise mais ferme pour une facture impayée. Demande-moi les détails nécessaires." },
+      { icon: "📱", title: "Publication pour les réseaux sociaux", text: "Aide-moi à rédiger une publication pour promouvoir mon activité sur les réseaux sociaux. Demande-moi de quoi il s'agit et sur quelle plateforme." },
+    ],
+    suggestions: ["Écris-moi un e-mail professionnel", "Résume-moi un texte", "Explique-moi quelque chose simplement"],
+  },
+  de: {
+    subtitle: "Für alle, die ihr eigenes Geschäft führen",
+    newChat: "Neuer Chat",
+    placeholder: "Nachricht schreiben...",
+    send: "Senden",
+    disclaimer: "Nova kann Fehler machen — wichtige Informationen bitte überprüfen.",
+    quotaRemaining: (n) => `${n} kostenlose Nachricht${n === 1 ? '' : 'n'} heute übrig`,
+    limitReached: "Du hast das heutige Limit an kostenlosen Nachrichten erreicht. Komm morgen wieder oder wechsle zu Nova Plus für unbegrenzte Nachrichten.",
+    limitPlaceholder: "Tageslimit erreicht",
+    greetingTitle: "Hallo, ich bin Nova.",
+    greetingBody: "Der Assistent für alle, die ein Geschäft führen: keine komplizierten Prompts, nur die Werkzeuge, die du jeden Tag brauchst.",
+    toolsLabel: "Was brauchst du heute?",
+    orLabel: "Oder",
+    copy: "Kopieren",
+    copied: "Kopiert!",
+    errorGeneric: "Beim Erstellen der Antwort ist ein Problem aufgetreten. Bitte versuche es erneut.",
+    errorRate: "Nova erhält gerade zu viele Anfragen. Versuche es in ein paar Sekunden erneut.",
+    errorAuth: "Der Dienst ist noch nicht korrekt konfiguriert. Bitte versuche es später erneut.",
+    errorServer: "Der Nova-Dienst ist derzeit nicht verfügbar. Bitte versuche es bald erneut.",
+    errorConnection: "Es ist ein Verbindungsfehler aufgetreten. Überprüfe dein Netzwerk und versuche es erneut.",
+    fallbackReply: "Entschuldigung, ich konnte keine Antwort erstellen. Bitte versuche es erneut.",
+    tools: [
+      { icon: "📄", title: "Angebot für einen Kunden", text: "Hilf mir, ein professionelles Angebot zu schreiben. Stelle mir die nötigen Fragen (Leistung, Preis, Zeitrahmen)." },
+      { icon: "😤", title: "Auf einen unzufriedenen Kunden antworten", text: "Ich muss ruhig und professionell auf einen unzufriedenen Kunden antworten. Frag mich, was passiert ist, und hilf mir bei der Antwort." },
+      { icon: "💰", title: "Zahlungserinnerung", text: "Hilf mir, eine freundliche, aber bestimmte Zahlungserinnerung für eine offene Rechnung zu schreiben. Frag mich nach den nötigen Details." },
+      { icon: "📱", title: "Social-Media-Beitrag", text: "Hilf mir, einen Social-Media-Beitrag für mein Unternehmen zu schreiben. Frag mich, worum es geht und für welche Plattform." },
+    ],
+    suggestions: ["Schreib mir eine professionelle E-Mail", "Fasse mir einen Text zusammen", "Erkläre mir etwas einfach"],
+  },
+  pt: {
+    subtitle: "Para quem toca o próprio negócio",
+    newChat: "Nova conversa",
+    placeholder: "Escreva uma mensagem...",
+    send: "Enviar",
+    disclaimer: "A Nova pode cometer erros — verifique as informações importantes.",
+    quotaRemaining: (n) => `${n} mensage${n === 1 ? 'm' : 'ns'} grátis restante${n === 1 ? '' : 's'} hoje`,
+    limitReached: "Você atingiu o limite de mensagens gratuitas de hoje. Volte amanhã, ou faça upgrade para o Nova Plus para mensagens ilimitadas.",
+    limitPlaceholder: "Limite diário atingido",
+    greetingTitle: "Olá, eu sou a Nova.",
+    greetingBody: "A assistente feita para quem toca um negócio: sem prompts complicados, só as ferramentas que você usa todo dia.",
+    toolsLabel: "O que você precisa hoje?",
+    orLabel: "Ou então",
+    copy: "Copiar",
+    copied: "Copiado!",
+    errorGeneric: "Ocorreu um problema ao gerar a resposta. Tente novamente.",
+    errorRate: "A Nova está recebendo muitas solicitações agora. Tente novamente em alguns segundos.",
+    errorAuth: "O serviço ainda não está configurado corretamente. Tente novamente mais tarde.",
+    errorServer: "O serviço da Nova está indisponível no momento. Tente novamente em breve.",
+    errorConnection: "Ocorreu um erro de conexão. Verifique sua rede e tente novamente.",
+    fallbackReply: "Desculpe, não consegui gerar uma resposta. Tente novamente.",
+    tools: [
+      { icon: "📄", title: "Orçamento para um cliente", text: "Ajude-me a escrever um orçamento profissional. Faça as perguntas que precisar (serviço, preço, prazos)." },
+      { icon: "😤", title: "Responder a um cliente insatisfeito", text: "Preciso responder a um cliente insatisfeito de forma calma e profissional. Pergunte o que aconteceu e ajude-me a escrever a resposta." },
+      { icon: "💰", title: "Lembrete de pagamento", text: "Ajude-me a escrever um lembrete de pagamento gentil, mas firme, para uma fatura em aberto. Pergunte os detalhes necessários." },
+      { icon: "📱", title: "Post para redes sociais", text: "Ajude-me a escrever um post para promover meu negócio nas redes sociais. Pergunte do que se trata e em qual plataforma." },
+    ],
+    suggestions: ["Escreva um e-mail profissional para mim", "Resuma um texto para mim", "Explique algo de forma simples"],
+  },
+};
 
+function detectLang() {
+  const supported = Object.keys(TRANSLATIONS);
+  const browserLangs = navigator.languages || [navigator.language || 'en'];
+  for (const bl of browserLangs) {
+    const code = bl.slice(0, 2).toLowerCase();
+    if (supported.includes(code)) return code;
+  }
+  return 'en';
+}
+
+const LANG = detectLang();
+const T = TRANSLATIONS[LANG];
+document.documentElement.lang = LANG;
+
+// ---------- app ----------
 const STORAGE_KEY = 'nova_conversation';
 const QUOTA_KEY = 'nova_quota';
 const DAILY_LIMIT = 15;
-const MAX_CHARS = 4000;
 
 let conversation = [];
 let isSending = false;
@@ -128,6 +315,13 @@ const sendBtn = document.getElementById('send-btn');
 const resetBtn = document.getElementById('reset-btn');
 const quotaBadge = document.getElementById('quota-badge');
 const limitBanner = document.getElementById('limit-banner');
+
+// static texts
+document.getElementById('header-subtitle').textContent = T.subtitle;
+resetBtn.textContent = T.newChat;
+textInput.placeholder = T.placeholder;
+document.getElementById('disclaimer').textContent = T.disclaimer;
+limitBanner.textContent = T.limitReached;
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -171,11 +365,11 @@ function updateQuotaUI() {
   if (quotaExceeded) {
     quotaBadge.textContent = '';
     limitBanner.classList.add('show');
-    textInput.placeholder = 'Limite giornaliero raggiunto';
+    textInput.placeholder = T.limitPlaceholder;
   } else {
     limitBanner.classList.remove('show');
-    textInput.placeholder = 'Scrivi un messaggio...';
-    quotaBadge.textContent = `${remaining} messagg${remaining === 1 ? 'io' : 'i'} gratuiti rimasti oggi`;
+    textInput.placeholder = T.placeholder;
+    quotaBadge.textContent = T.quotaRemaining(remaining);
     quotaBadge.classList.toggle('low', remaining <= 3);
   }
 
@@ -194,15 +388,25 @@ function renderEmptyState() {
         <svg viewBox="0 0 24 24"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"/></svg>
       </div>
       <div>
-        <h2>Ciao, sono Nova.</h2>
-        <p>Fai una domanda, chiedi un consiglio o fatti aiutare a scrivere qualcosa. Rispondo in italiano, in tempo reale.</p>
+        <h2>${T.greetingTitle}</h2>
+        <p>${T.greetingBody}</p>
       </div>
+      <div class="tools-label">${T.toolsLabel}</div>
+      <div class="tools-grid">
+        ${T.tools.map(t => `
+          <button class="tool-card" data-text="${t.text.replace(/"/g, '&quot;')}">
+            <span class="tool-icon">${t.icon}</span>
+            <span class="tool-title">${t.title}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="tools-label">${T.orLabel}</div>
       <div class="suggestions">
-        ${SUGGESTIONS.map(s => `<button class="suggestion-chip" data-text="${s}">${s}</button>`).join('')}
+        ${T.suggestions.map(s => `<button class="suggestion-chip" data-text="${s.replace(/"/g, '&quot;')}">${s}</button>`).join('')}
       </div>
     </div>
   `;
-  document.querySelectorAll('.suggestion-chip').forEach(btn => {
+  document.querySelectorAll('.tool-card, .suggestion-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       if (remainingMessages() <= 0 || isSending) return;
       textInput.value = btn.dataset.text;
@@ -261,7 +465,7 @@ function renderMessages() {
       ${m.role === 'assistant' && !m.isError ? `
         <button class="copy-btn" data-index="${i}">
           <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-          <span>Copia</span>
+          <span>${T.copy}</span>
         </button>
       ` : ''}
     </div>
@@ -276,14 +480,14 @@ function renderMessages() {
         await navigator.clipboard.writeText(text);
         const span = btn.querySelector('span');
         const original = span.textContent;
-        span.textContent = 'Copiato!';
+        span.textContent = T.copied;
         btn.classList.add('copied');
         setTimeout(() => {
           span.textContent = original;
           btn.classList.remove('copied');
         }, 1500);
       } catch (e) {
-        console.error('Copia non riuscita:', e);
+        console.error('Copy failed:', e);
       }
     });
   });
@@ -307,7 +511,7 @@ function saveConversation() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(conversation));
   } catch (e) {
-    console.error('Errore salvataggio locale:', e);
+    console.error('Save error:', e);
   }
 }
 
@@ -322,10 +526,10 @@ function loadConversation() {
 }
 
 function errorMessageFor(status) {
-  if (status === 429) return "Nova sta ricevendo troppe richieste in questo momento. Riprova tra qualche secondo.";
-  if (status === 401 || status === 403) return "Il servizio non è ancora configurato correttamente. Riprova più tardi.";
-  if (status >= 500) return "Il servizio di Nova non è al momento disponibile. Riprova tra poco.";
-  return "Si è verificato un problema nella generazione della risposta. Riprova.";
+  if (status === 429) return T.errorRate;
+  if (status === 401 || status === 403) return T.errorAuth;
+  if (status >= 500) return T.errorServer;
+  return T.errorGeneric;
 }
 
 async function sendMessage() {
@@ -367,7 +571,7 @@ async function sendMessage() {
     if (!response.ok) {
       conversation.push({ role: 'assistant', content: errorMessageFor(response.status), isError: true });
     } else {
-      const reply = data.reply || "Scusa, non sono riuscita a rispondere. Riprova.";
+      const reply = data.reply || T.fallbackReply;
       conversation.push({ role: 'assistant', content: reply });
       incrementQuota();
     }
@@ -376,7 +580,7 @@ async function sendMessage() {
     saveConversation();
   } catch (err) {
     hideTyping();
-    conversation.push({ role: 'assistant', content: "Si è verificato un errore di connessione. Controlla la rete e riprova.", isError: true });
+    conversation.push({ role: 'assistant', content: T.errorConnection, isError: true });
     renderMessages();
     saveConversation();
   } finally {
