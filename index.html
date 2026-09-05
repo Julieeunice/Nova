@@ -9,6 +9,7 @@
             --bg-color: #0d1117;
             --card-bg: #161b22;
             --accent-color: #2ea44f;
+            --search-accent: #238636;
             --text-color: #c9d1d9;
             --text-muted: #8b949e;
             --border-color: #30363d;
@@ -35,7 +36,7 @@
             text-align: center;
             margin-bottom: 30px;
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
         }
 
         header h1 {
@@ -51,7 +52,7 @@
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
         }
 
         /* Schermata Selezione Profili */
@@ -61,19 +62,25 @@
             gap: 15px;
         }
 
+        @media (max-width: 400px) {
+            .grid-profili {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .grid-profili button {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 25px 15px;
+            padding: 20px 15px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             transition: transform 0.2s, border-color 0.2s;
         }
 
@@ -82,8 +89,25 @@
             transform: translateY(-2px);
         }
 
+        /* Bottone Speciale per Cercare Altro */
+        .grid-profili button.btn-special-search {
+            grid-column: span 2;
+            background-color: #21262d;
+            border: 1px dashed var(--search-accent);
+            color: #58a6ff;
+        }
+        @media (max-width: 400px) {
+            .grid-profili button.btn-special-search {
+                grid-column: span 1;
+            }
+        }
+        .grid-profili button.btn-special-search:hover {
+            border-color: #58a6ff;
+            background-color: #282e38;
+        }
+
         .icona {
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
 
         /* Schermata Dashboard Profilo */
@@ -121,6 +145,42 @@
             gap: 10px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 10px;
+        }
+
+        /* Box di Input per la ricerca dinamica */
+        .search-box-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .search-submit-btn {
+            background-color: var(--search-accent);
+            border: none;
+            color: white;
+            padding: 0 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .search-submit-btn:hover {
+            background-color: var(--accent-color);
         }
 
         /* Griglia dei Bottoni Funzionali */
@@ -166,7 +226,7 @@
 
     <header>
         <h1>★ Nova</h1>
-        <p>Scegli il tuo profilo per iniziare</p>
+        <p>Scegli il tuo profilo o cerca quello perfetto per te</p>
     </header>
 
     <div class="container">
@@ -188,12 +248,38 @@
             <button onclick="apriProfilo('ricercatore', '🔬 Ricercatore')">
                 <span class="icona">🔬</span> Ricercatore
             </button>
+            <button onclick="apriProfilo('ingegnere', '💻 Ingegnere & Dev')">
+                <span class="icona">💻</span> Ingegnere & Dev
+            </button>
+            <button onclick="apriProfilo('chef', '👨‍🍳 Chef & Cucina')">
+                <span class="icona">👨‍🍳</span> Chef & Cucina
+            </button>
+            <button onclick="apriProfilo('artista', '🎨 Artista & Creativo')">
+                <span class="icona">🎨</span> Artista & Creativo
+            </button>
+            <button onclick="apriProfilo('avvocato', '⚖️ Avvocato')">
+                <span class="icona">⚖️</span> Avvocato
+            </button>
+            <button onclick="apriProfilo('insegnante', '🍎 Insegnante')">
+                <span class="icona">🍎</span> Insegnante
+            </button>
+            
+            <!-- NUOVO BOTTONE: APRENDO QUESTO TROVERANNO CIÒ CHE CERCANO -->
+            <button class="btn-special-search" onclick="apriInterfacciaRicerca()">
+                <span class="icona">🔍</span> Non trovi il tuo profilo? Cerca Altro...
+            </button>
         </div>
 
         <!-- SCHERMATA 2: DASHBOARD DINAMICA -->
         <div id="schermata-dashboard" class="dashboard">
-            <button class="btn-indietro" onclick="tornaAllaHome()">← Cambia profilo</button>
+            <button class="btn-indietro" onclick="tornaAllaHome()">← Torna alla Home</button>
             <h2 id="titolo-profilo-attivo" class="titolo-profilo">Profilo</h2>
+            
+            <!-- Box di ricerca visibile solo nella modalità di ricerca personalizzata -->
+            <div id="area-ricerca-personalizzata" class="search-box-container" style="display: none;">
+                <input type="text" id="input-lavoro-personalizzato" class="search-input" placeholder="Es. Meccanico, Fotografo, Scrittore, Sportivo...">
+                <button class="search-submit-btn" onclick="generaProfiloSuMisura()">Crea Strumenti</button>
+            </div>
             
             <!-- Contenitore dinamico dei bottoni del profilo -->
             <div id="contenitore-bottoni" class="area-comandi"></div>
@@ -205,68 +291,11 @@
     </div>
 
     <script>
-        // Database dei bottoni e delle logiche funzionali per ogni profilo
+        // Database fisso dei profili principali
         const configurazioneProfili = {
             casalinga: [
-                {
-                    testo: "Genera menu svuota-frigo rapido",
-                    azione: () => "💡 **Idea Menu:** Pasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!"
-                },
-                {
-                    testo: "Controlla scadenze e priorità domestiche",
-                    azione: () => "📅 **Promemoria:**\n• Controllare scadenza latte e yogurt in frigo.\n• Pagamento bolletta luce entro questo venerdì."
-                },
-                {
-                    testo: "Crea lista della spesa intelligente",
-                    azione: () => "🛒 **Lista Base Pronta:** Pane, uova, verdure a foglia verde, detersivo piatti, caffè. Puoi copiarla e integrarla!"
-                }
+                { testo: "Genera menu svuota-frigo rapido", azione: () => "💡 **Idea Menu:** Pasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!" },
+                { testo: "Controlla scadenze e priorità domestiche", azione: () => "📅 **Promemoria:**\n• Controllare scadenza latte e yogurt in frigo.\n• Pagamento bolletta luce entro questo venerdì." },
+                { testo: "Crea lista della spesa intelligente", azione: () => "🛒 **Lista Base Pronta:** Pane, uova, verdure a foglia verde, detersivo piatti, caffè. Puoi copiarla e integrarla!" }
             ],
             studente: [
-                {
-                    testo: "Avvia Timer Studio Pomodoro",
-                    azione: () => "⏱️ **Timer Avviato!** Concentrati al massimo per 25 minuti senza distrazioni. Al termine avrai 5 minuti di pausa meritata."
-                },
-                {
-                    testo: "Genera schema di ripasso generico",
-                    azione: () => "📝 **Metodo di Studio efficace:**\n1. Leggi i titoli dei capitoli.\n2. Evidenzia solo le parole chiave.\n3. Ripeti ad alta voce senza guardare il testo."
-                },
-                {
-                    testo: "Trucchi di memorizzazione rapida",
-                    azione: () => "🧠 **Tecnica dei Loci:** Associa i concetti più difficili agli oggetti della tua stanza per ricordarli facilmente durante l'esame."
-                }
-            ],
-            dottore: [
-                {
-                    testo: "Verifica linee guida calcolo dosaggi generici",
-                    azione: () => "📋 **Standard di riferimento:** Il calcolo pediatrico richiede precisione millimetrica in base alla superficie corporea o al peso esatto (mg/kg). Controllare sempre il doppio fattore di spunta."
-                },
-                {
-                    testo: "Prontuario di riferimento rapido sintomi",
-                    azione: () => "🔍 **Memo Clinico:** Valutare sempre la triade sintomatologica principale prima di strutturare la diagnosi differenziale standard."
-                },
-                {
-                    testo: "Promemoria ottimizzazione turni e visite",
-                    azione: () => "⏳ **Organizzazione:** Prevedere 15 minuti di stacco tra i pazienti complessi per l'aggiornamento accurato della cartella clinica."
-                }
-            ],
-            astronomo: [
-                {
-                    testo: "Calcolatore distanze cosmiche (UA / Anni Luce)",
-                    azione: () => "🌌 **Tabella conversioni rapide:**\n• 1 Unità Astronomica (UA) = ~150 Milioni di km\n• 1 Anno Luce = ~9,46 Trilioni di km\n• 1 Parsec = 3,26 Anni Luce."
-                },
-                {
-                    testo: "Mappa coordinate corpi celesti stasera",
-                    azione: () => "🔭 **Target di osservazione consigliati:** Giove visibile ad est subito dopo il tramonto. Ottima visibilità della Nebulosa di Orione nelle ore centrali della notte."
-                },
-                {
-                    testo: "Notifiche eventi cosmici e satelliti",
-                    azione: () => "☄️ **Allerta Eventi:** Sciame meteorico minore previsto per il fine settimana. Transito della Stazione Spaziale Internazionale (ISS) visibile a occhio nudo alle ore 21:04."
-                }
-            ],
-            ricercatore: [
-                {
-                    testo: "Accedi a scorciatoie database scientifici",
-                    azione: () => "📚 **Link utili di ricerca:** Ricorda di utilizzare gli operatori booleani (AND, OR, NOT) su PubMed, Google Scholar e arXiv per filtrare solo i paper peer-reviewed dell'ultimo anno."
-                },
-                {
-                    testo: "Formattatore automatico citazioni (Anteprima)",
