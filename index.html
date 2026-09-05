@@ -9,12 +9,9 @@
             --bg-color: #0d1117;
             --card-bg: #161b22;
             --accent-color: #2ea44f;
-            --search-accent: #238636;
+            --border-color: #30363d;
             --text-color: #c9d1d9;
             --text-muted: #8b949e;
-            --border-color: #30363d;
-            --chat-user: #21262d;
-            --chat-ai: #1f242c;
         }
 
         * {
@@ -22,7 +19,6 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -39,7 +35,7 @@
             text-align: center;
             margin-bottom: 30px;
             width: 100%;
-            max-width: 700px;
+            max-width: 650px;
         }
 
         header h1 {
@@ -55,164 +51,129 @@
 
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 650px;
         }
 
-        /* Schermata Selezione Profili */
+        /* Gestione Schermate tramite CSS puro Target (Infallibile su Android) */
+        .sezione-app {
+            display: none;
+        }
+
+        #schermata-home {
+            display: block;
+        }
+
+        :target {
+            display: block !important;
+        }
+
+        :target ~ #schermata-home {
+            display: none !important;
+        }
+
+        /* Griglia di Selezione */
         .grid-profili {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
-        @media (max-width: 480px) {
-            .grid-profili {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .grid-profili button {
+        .profilo-link {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 25px 20px;
+            padding: 22px 15px;
             color: white;
             font-size: 1.1rem;
             font-weight: 600;
-            cursor: pointer;
+            text-decoration: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
+            text-align: center;
             transition: border-color 0.2s;
         }
 
-        .grid-profili button:hover {
+        .profilo-link:active {
             border-color: var(--accent-color);
+            background-color: #1f242c;
         }
 
-        .grid-profili button.btn-special-search {
+        .btn-cerca-altro {
             grid-column: span 2;
-            background-color: #21262d;
-            border: 1px dashed var(--search-accent);
+            border: 1px dashed #58a6ff;
             color: #58a6ff;
-        }
-        @media (max-width: 480px) {
-            .grid-profili button.btn-special-search {
-                grid-column: span 1;
-            }
         }
 
         .icona {
             font-size: 2rem;
         }
 
-        /* Schermata Chat Interattiva */
-        .dashboard {
-            display: none;
+        /* Struttura Box Chat */
+        .box-chat-completo {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            width: 100%;
         }
 
-        .btn-indietro {
-            background: none;
-            border: none;
+        .btn-torna-su {
+            display: inline-block;
             color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-indietro:hover {
-            color: white;
-        }
-
-        .titolo-profilo {
-            font-size: 1.6rem;
-            color: white;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-        }
-
-        /* Box contenitore dei messaggi di chat */
-        .chat-window {
-            background-color: #0d1117;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            height: 350px;
-            overflow-y: auto;
-            padding: 15px;
+            text-decoration: none;
             margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .messaggio {
-            padding: 12px 16px;
-            border-radius: 8px;
-            max-width: 85%;
             font-size: 1rem;
-            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        .btn-torna-su:hover {
+            color: white;
+        }
+
+        .titolo-chat {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .area-testo-risposta {
+            background-color: #0d1117;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            line-height: 1.6;
             white-space: pre-wrap;
-        }
-
-        .user-msg {
-            background-color: var(--chat-user);
-            color: #ffffff;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-
-        .ai-msg {
-            background-color: var(--chat-ai);
+            margin-bottom: 20px;
             color: #e6edf3;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border-left: 3px solid var(--accent-color);
         }
 
-        /* Barra di input inferiore della chat */
-        .chat-input-container {
+        .input-chat-container {
             display: flex;
             gap: 10px;
         }
 
-        .chat-input {
+        .input-casella {
             flex: 1;
             background-color: #0d1117;
             border: 1px solid var(--border-color);
-            padding: 14px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 6px;
             color: white;
             font-size: 1rem;
         }
 
-        .chat-input:focus {
-            outline: none;
-            border-color: #58a6ff;
-        }
-
-        .chat-submit-btn {
-            background-color: var(--search-accent);
+        .btn-invia-chat {
+            background-color: var(--accent-color);
             border: none;
             color: white;
-            padding: 0 22px;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 0 20px;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .chat-submit-btn:hover {
-            background-color: var(--accent-color);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -224,71 +185,85 @@
     </header>
 
     <div class="container">
-        
-        <!-- SCHERMATA 1: SELEZIONE PROFILI -->
-        <div id="schermata-selezione" class="grid-profili">
-            <button onclick="apriChat('casalinga', '🏠 Profilo Casalinga')">
-                <span class="icona">🏠</span> Casalinga
-            </button>
-            <button onclick="apriChat('studente', '🎓 Profilo Studente')">
-                <span class="icona">🎓</span> Studente
-            </button>
-            <button onclick="apriChat('dottore', '🩺 Profilo Dottore')">
-                <span class="icona">🩺</span> Dottore
-            </button>
-            <button onclick="apriChat('astronomo', '🚀 Profilo Astronomo')">
-                <span class="icona">🚀</span> Astronomo
-            </button>
-            <button onclick="apriChat('ricercatore', '🔬 Profilo Ricercatore')">
-                <span class="icona">🔬</span> Ricercatore
-            </button>
-            <button onclick="apriChat('ingegnere', '💻 Profilo Ingegnere & Dev')">
-                <span class="icona">💻</span> Ingegnere & Dev
-            </button>
-            <button onclick="apriChat('chef', '👨‍🍳 Profilo Chef & Cucina')">
-                <span class="icona">👨‍🍳</span> Chef & Cucina
-            </button>
-            <button onclick="apriChat('artista', '🎨 Profilo Artista & Creativo')">
-                <span class="icona">🎨</span> Artista & Creativo
-            </button>
-            <button onclick="apriChat('avvocato', '⚖️ Profilo Avvocato')">
-                <span class="icona">⚖️</span> Avvocato
-            </button>
-            <button onclick="apriChat('insegnante', '🍎 Profilo Insegnante')">
-                <span class="icona">🍎</span> Insegnante
-            </button>
-            
-            <button class="btn-special-search" onclick="apriChat('personalizzato', '🔍 Profilo Personalizzato')">
-                <span class="icona">🔍</span> Cerca o inventa un altro profilo...
-            </button>
-        </div>
 
-        <!-- SCHERMATA 2: CHAT CON IA -->
-        <div id="schermata-dashboard" class="dashboard">
-            <button class="btn-indietro" onclick="tornaAllaHome()">← Esci dalla chat</button>
-            <h2 id="titolo-profilo-attivo" class="titolo-profilo">Profilo</h2>
-            
-            <!-- Finestra di conversazione -->
-            <div id="finestra-chat" class="chat-window"></div>
-            
-            <!-- Barra di invio messaggi -->
-            <div class="chat-input-container">
-                <input type="text" id="input-messaggio-utente" class="chat-input" placeholder="Scrivi un messaggio alla IA...">
-                <button class="chat-submit-btn" onclick="inviaMessaggio()">Invia</button>
+        <!-- 1. CHAT CASALINGA -->
+        <div id="profilo-casalinga" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">🏠 Chat Casalinga</h2>
+            <div id="risposta-casalinga" class="area-testo-risposta">Ciao! Sono la tua assistente domestica Nova. Chiedimi idee per ricette, gestione spese o liste della spesa intelligenti!</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-casalinga" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('casalinga')">Invia</button>
             </div>
         </div>
 
-    </div>
+        <!-- 2. CHAT STUDENTE -->
+        <div id="profilo-studente" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">🎓 Chat Studente</h2>
+            <div id="risposta-studente" class="area-testo-risposta">Ehi! Sono il tuo tutor personale Nova. Incolla i tuoi argomenti o chiedimi schemi per memorizzare velocemente!</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-studente" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('studente')">Invia</button>
+            </div>
+        </div>
 
-    <script>
-        let profiloAttivo = '';
+        <!-- 3. CHAT DOTTORE -->
+        <div id="profilo-dottore" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">🩺 Chat Dottore</h2>
+            <div id="risposta-dottore" class="area-testo-risposta">Benvenuto nel modulo di supporto clinico Nova. Come posso aiutarti nell'organizzazione o nella struttura dei tuoi schemi di visita?</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-dottore" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('dottore')">Invia</button>
+            </div>
+        </div>
 
-        // Messaggi di benvenuto iniziali differenziati per identità
-        const benvenutoIA = {
-            casalinga: "Ciao! Sono la tua assistente domestica Nova. Chiedimi pure idee per ricette svuota-frigo, liste della spesa intelligenti o l'organizzazione dei turni delle pulizie!",
-            studente: "Ehi! Sono il tuo tutor personale Nova. Incolla pure i tuoi appunti, chiedimi riassunti automatici, quiz di autovalutazione o metodi per memorizzare più in fretta!",
-            dottore: "Benvenuto Dottore. Sono il modulo di supporto clinico Nova. Posso aiutarti a schematizzare promemoria per i turni o a revisionare la struttura di referti standard.",
-            astronomo: "Saluti! Sistema di calcolo cosmico Nova attivo. Chiedimi costellazioni visibili stasera, calcoli di distanze in Anni Luce o passaggi dei satelliti artificiali.",
-            ricercatore: "Benvenuto nei laboratori Nova. Posso supportarti nella formattazione delle citazioni accademiche (APA, MLA) o nell'estrazione di concetti statistici chiave.",
-            ingegnere: "Console di programmazione attiva. Sono pronto a generare boilerplate di codice, analizzare stringhe o fornirti i comandi terminali utili per i tuoi progetti.",
-            chef: "Chef, ai tuoi ordini! Dimmi quali ingredienti hai a disposizione e studieremo insieme il bilanciamento ideale dei sapori o la temperatura perfetta per la cottura.",
+        <!-- 4. CHAT ASTRONOMO -->
+        <div id="profilo-astronomo" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">🚀 Chat Astronomo</h2>
+            <div id="risposta-astronomo" class="area-testo-risposta">Sistema di calcolo cosmico Nova attivo. Chiedimi distanze stellari, eventi celesti o coordinate di osservazione.</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-astronomo" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('astronomo')">Invia</button>
+            </div>
+        </div>
+
+        <!-- 5. CHAT RICERCATORE -->
+        <div id="profilo-ricercatore" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">🔬 Chat Ricercatore</h2>
+            <div id="risposta-ricercatore" class="area-testo-risposta">Benvenuto nei laboratori Nova. Sono pronto ad aiutarti con formati di citazione accademiche e concetti statistici.</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-ricercatore" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('ricercatore')">Invia</button>
+            </div>
+        </div>
+
+        <!-- 6. CHAT INGEGNERE -->
+        <div id="profilo-ingegnere" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">💻 Chat Ingegnere & Dev</h2>
+            <div id="risposta-ingegnere" class="area-testo-risposta">Console di sviluppo attiva. Chiedimi setup di codice, comandi terminali o risoluzione di bug.</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-ingegnere" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('ingegnere')">Invia</button>
+            </div>
+        </div>
+
+        <!-- 7. CHAT CHEF -->
+        <div id="profilo-chef" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">👨‍🍳 Chat Chef & Cucina</h2>
+            <div id="risposta-chef" class="area-testo-risposta">Chef, ai tuoi ordini! Chiedimi combinazioni di sapori, ricette professionali o tabelle di cottura dei cibi.</div>
+            <div class="input-chat-container">
+                <input type="text" id="ins-chef" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="parlaConIa('chef')">Invia</button>
+            </div>
+        </div>
+
+        <!-- 8. CHAT ARTISTA -->
+        <div id="profilo-artista" class="sezione-app box-chat-completo">
+            <a href="#" class="btn-torna-su">← Torna alla lista</a>
+            <h2 class="titolo-chat">🎨 Chat Artista & Creativo</h2>
