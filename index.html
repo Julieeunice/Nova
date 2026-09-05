@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nova - L'Assistente Universale</title>
     <style>
         :root {
@@ -19,7 +19,9 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            /* Impedisce la selezione del testo fastidiosa durante i tocchi ripetuti su tablet */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -36,33 +38,33 @@
             text-align: center;
             margin-bottom: 30px;
             width: 100%;
-            max-width: 650px;
+            max-width: 700px;
         }
 
         header h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #ffffff;
             margin-bottom: 5px;
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 700px;
         }
 
-        /* Schermata Selezione Profili */
+        /* Schermata Selezione Profili - Ottimizzata per schermi Tablet */
         .grid-profili {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
         }
 
-        @media (max-width: 400px) {
+        @media (max-width: 480px) {
             .grid-profili {
                 grid-template-columns: 1fr;
             }
@@ -71,43 +73,43 @@
         .grid-profili button {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px 15px;
+            border-radius: 10px;
+            padding: 25px 20px;
             color: white;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            transition: transform 0.2s, border-color 0.2s;
+            gap: 12px;
+            transition: background-color 0.2s, border-color 0.2s;
         }
 
-        .grid-profili button:hover {
+        /* Effetto attivo ottimizzato per il tocco su tablet Android */
+        .grid-profili button:active {
+            background-color: #1f242c;
             border-color: var(--accent-color);
-            transform: translateY(-2px);
         }
 
-        /* Bottone Speciale per Cercare Altro */
         .grid-profili button.btn-special-search {
             grid-column: span 2;
             background-color: #21262d;
             border: 1px dashed var(--search-accent);
             color: #58a6ff;
         }
-        @media (max-width: 400px) {
+        @media (max-width: 480px) {
             .grid-profili button.btn-special-search {
                 grid-column: span 1;
             }
         }
-        .grid-profili button.btn-special-search:hover {
-            border-color: #58a6ff;
+        .grid-profili button.btn-special-search:active {
             background-color: #282e38;
+            border-color: #58a6ff;
         }
 
         .icona {
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
         /* Schermata Dashboard Profilo */
@@ -116,7 +118,7 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             width: 100%;
         }
 
@@ -125,43 +127,44 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            padding: 10px 0;
             display: flex;
             align-items: center;
             gap: 5px;
         }
 
-        .btn-indietro:hover {
+        .btn-indietro:active {
             color: white;
         }
 
         .titolo-profilo {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: white;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
             gap: 10px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+            padding-bottom: 12px;
         }
 
         /* Box di Input per la ricerca dinamica */
         .search-box-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .search-input {
             flex: 1;
             background-color: #0d1117;
             border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 6px;
+            padding: 14px;
+            border-radius: 8px;
             color: white;
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
 
         .search-input:focus {
@@ -173,13 +176,14 @@
             background-color: var(--search-accent);
             border: none;
             color: white;
-            padding: 0 20px;
-            border-radius: 6px;
+            padding: 0 25px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1rem;
         }
 
-        .search-submit-btn:hover {
+        .search-submit-btn:active {
             background-color: var(--accent-color);
         }
 
@@ -187,36 +191,35 @@
         .area-comandi {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .btn-azione {
             background-color: #21262d;
             border: 1px solid var(--border-color);
             color: white;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 18px;
+            border-radius: 8px;
             text-align: left;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 500;
-            transition: background-color 0.2s;
         }
 
-        .btn-azione:hover {
+        .btn-azione:active {
             background-color: #30363d;
             border-color: #8b949e;
         }
 
-        /* Area di Output dei Risultati - Modificata per massima compatibilità */
+        /* Area di Output dei Risultati */
         .output-box {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 25px;
+            padding: 18px;
             background-color: #0d1117;
-            border-radius: 6px;
-            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            border-left: 5px solid var(--accent-color);
             display: none;
-            font-size: 1rem;
+            font-size: 1.05rem;
             line-height: 1.6;
             white-space: pre-wrap;
             color: #e6edf3;
@@ -282,14 +285,12 @@
             
             <div id="contenitore-bottoni" class="area-comandi"></div>
             
-            <!-- Box di Output -->
             <div id="box-risultato" class="output-box"></div>
         </div>
 
     </div>
 
     <script>
-        // Database semplificato: rimosse le funzioni a freccia nidificate per stabilità totale mobile
         const configurazioneProfili = {
             casalinga: [
                 { testo: "Genera menu svuota-frigo rapido", risp: "💡 Idea Menu:\nPasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!" },
