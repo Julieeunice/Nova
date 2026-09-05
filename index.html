@@ -157,8 +157,8 @@
 
         /* AREA CHAT INTERFACCIA */
         .chat-container { display: flex; flex-direction: column; gap: 20px; }
-        .chat-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; min-height: 200px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .message { padding: 12px 16px; border-radius: 12px; max-width: 85%; font-size: 15px; line-height: 1.5; }
+        .chat-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; min-height: 250px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 16px; border-radius: 12px; max-width: 85%; font-size: 15px; line-height: 1.5; word-wrap: break-word; }
         .msg-user { background: rgba(255,255,255,0.08); align-self: flex-end; color: #fff; }
         .msg-nova { background: rgba(255, 159, 67, 0.1); border: 1px solid rgba(255, 159, 67, 0.15); align-self: flex-start; color: #f3f4f6; }
         
@@ -212,4 +212,3 @@
                     <span class="profile-title">Sanità / Salute</span>
                 </div>
                 <div class="profile-card p-general" onclick="openCategory('general')">
-                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
