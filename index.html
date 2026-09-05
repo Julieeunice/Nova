@@ -51,10 +51,15 @@
   #text-input { flex: 1; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 11px 16px; color: var(--text-primary); font-size: 14.5px; resize: none; max-height: 100px; font-family: inherit; }
   #text-input:focus { outline: none; border-color: var(--accent); }
   #text-input::placeholder { color: var(--text-secondary); }
+  #text-input:disabled { opacity: 0.5; }
   #send-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: opacity 0.15s; }
   #send-btn:disabled { opacity: 0.4; }
   #send-btn svg { width: 18px; height: 18px; fill: #1A1108; }
   .disclaimer { text-align: center; font-size: 10.5px; color: var(--text-secondary); padding: 6px 0 0; }
+  .quota-badge { text-align: center; font-size: 11px; color: var(--text-secondary); padding: 4px 0 0; }
+  .quota-badge.low { color: var(--accent); }
+  .limit-banner { background: var(--bubble-nova); border: 1px solid var(--accent); border-radius: 12px; padding: 14px 16px; margin: 0 20px 12px; font-size: 13.5px; line-height: 1.5; text-align: center; display: none; }
+  .limit-banner.show { display: block; }
   #messages::-webkit-scrollbar { width: 4px; }
   #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 </style>
@@ -75,12 +80,17 @@
 
   <div id="messages"></div>
 
+  <div class="limit-banner" id="limit-banner">
+    Hai raggiunto il limite di messaggi gratuiti per oggi. Torna domani, oppure passa a Nova Plus per messaggi illimitati.
+  </div>
+
   <div id="input-bar">
     <textarea id="text-input" placeholder="Scrivi un messaggio..." rows="1"></textarea>
     <button id="send-btn" aria-label="Invia">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
     </button>
   </div>
+  <div class="quota-badge" id="quota-badge"></div>
   <div class="disclaimer" style="padding-bottom: 8px;">Nova può commettere errori — verifica le informazioni importanti.</div>
 </div>
 
@@ -93,11 +103,68 @@ const SUGGESTIONS = [
 ];
 
 const STORAGE_KEY = 'nova_conversation';
+const QUOTA_KEY = 'nova_quota';
+const DAILY_LIMIT = 15;
+
 let conversation = [];
 const messagesEl = document.getElementById('messages');
 const textInput = document.getElementById('text-input');
 const sendBtn = document.getElementById('send-btn');
 const resetBtn = document.getElementById('reset-btn');
+const quotaBadge = document.getElementById('quota-badge');
+const limitBanner = document.getElementById('limit-banner');
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10); // es. "2026-09-05"
+}
+
+function getQuota() {
+  try {
+    const raw = localStorage.getItem(QUOTA_KEY);
+    const data = raw ? JSON.parse(raw) : null;
+    if (!data || data.date !== todayKey()) {
+      return { date: todayKey(), count: 0 };
+    }
+    return data;
+  } catch (e) {
+    return { date: todayKey(), count: 0 };
+  }
+}
+
+function saveQuota(quota) {
+  try {
+    localStorage.setItem(QUOTA_KEY, JSON.stringify(quota));
+  } catch (e) {}
+}
+
+function remainingMessages() {
+  const quota = getQuota();
+  return Math.max(0, DAILY_LIMIT - quota.count);
+}
+
+function incrementQuota() {
+  const quota = getQuota();
+  quota.count += 1;
+  saveQuota(quota);
+  updateQuotaUI();
+}
+
+function updateQuotaUI() {
+  const remaining = remainingMessages();
+  if (remaining <= 0) {
+    quotaBadge.textContent = '';
+    limitBanner.classList.add('show');
+    textInput.disabled = true;
+    textInput.placeholder = 'Limite giornaliero raggiunto';
+    sendBtn.disabled = true;
+  } else {
+    limitBanner.classList.remove('show');
+    textInput.disabled = false;
+    textInput.placeholder = 'Scrivi un messaggio...';
+    quotaBadge.textContent = `${remaining} messagg${remaining === 1 ? 'io' : 'i'} gratuiti rimasti oggi`;
+    quotaBadge.classList.toggle('low', remaining <= 3);
+  }
+}
 
 function renderEmptyState() {
   messagesEl.innerHTML = `
@@ -116,6 +183,7 @@ function renderEmptyState() {
   `;
   document.querySelectorAll('.suggestion-chip').forEach(btn => {
     btn.addEventListener('click', () => {
+      if (remainingMessages() <= 0) return;
       textInput.value = btn.dataset.text;
       sendMessage();
     });
@@ -177,6 +245,11 @@ async function sendMessage() {
   const text = textInput.value.trim();
   if (!text) return;
 
+  if (remainingMessages() <= 0) {
+    updateQuotaUI();
+    return;
+  }
+
   conversation.push({ role: 'user', content: text });
   textInput.value = '';
   textInput.style.height = 'auto';
@@ -198,12 +271,13 @@ async function sendMessage() {
     conversation.push({ role: 'assistant', content: reply });
     renderMessages();
     saveConversation();
+    incrementQuota();
   } catch (err) {
     hideTyping();
     conversation.push({ role: 'assistant', content: "Si è verificato un errore di connessione. Riprova tra poco." });
     renderMessages();
   } finally {
-    sendBtn.disabled = false;
+    updateQuotaUI();
   }
 }
 
@@ -228,6 +302,7 @@ resetBtn.addEventListener('click', () => {
 });
 
 loadConversation();
+updateQuotaUI();
 </script>
 
 </body>
