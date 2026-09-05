@@ -48,7 +48,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
-            display: none; /* Appare solo dentro le categorie */
+            display: none;
         }
 
         .brand-wrapper {
@@ -134,7 +134,7 @@
             color: #ffffff;
         }
 
-        /* COLORI DEI PROFILI */
+        /* COLORI DEI 6 PROFILI */
         .p-biz { border-color: rgba(255, 159, 67, 0.2); }
         .p-biz .profile-icon { background: rgba(255, 159, 67, 0.1); fill: #ff9f43; }
         .p-biz:hover { border-color: #ff9f43; }
@@ -154,6 +154,10 @@
         .p-health { border-color: rgba(155, 89, 182, 0.2); }
         .p-health .profile-icon { background: rgba(155, 89, 182, 0.1); fill: #9b59b6; }
         .p-health:hover { border-color: #9b59b6; }
+
+        .p-general { border-color: rgba(26, 188, 156, 0.2); }
+        .p-general .profile-icon { background: rgba(26, 188, 156, 0.1); fill: #1abc9c; }
+        .p-general:hover { border-color: #1abc9c; }
 
         /* GRIGLIA STRUMENTI INTERNI */
         .section-title {
@@ -232,7 +236,7 @@
             <p class="tagline" id="appTagline">Scegli il tuo profilo per iniziare</p>
         </header>
 
-        <!-- VISTA 1: SELEZIONE PROFILO -->
+        <!-- VISTA 1: SELEZIONE PROFILO (6 PROFILI COMPLETI) -->
         <div id="homeView" class="view">
             <div class="profile-grid">
                 <div class="profile-card p-biz" onclick="openCategory('business')">
@@ -255,6 +259,10 @@
                     <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M19 10.5h-5.5V5h-3v5.5H5v3h5.5V19h3v-5.5H19v-3z"/></svg></div>
                     <span class="profile-title">Sanità / Salute</span>
                 </div>
+                <div class="profile-card p-general" onclick="openCategory('general')">
+                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+                    <span class="profile-title">Tutto il resto (Generale)</span>
+                </div>
             </div>
         </div>
 
@@ -262,14 +270,13 @@
         <div id="categoryView" class="view hidden">
             <h3 class="section-title" id="categoryTitle">Strumenti disponibili</h3>
             <div class="tools-grid" id="toolsContainer">
-                <!-- I pulsanti vengono inseriti qui in automatico dal codice JavaScript sotto -->
+                <!-- Inseriti via JavaScript -->
             </div>
         </div>
 
     </div>
 
     <script>
-        // Database dei contenuti per ogni singola categoria
         const data = {
             business: {
                 tagline: "Strumenti di intelligenza artificiale per il tuo business",
@@ -277,5 +284,3 @@
                 bg: "rgba(255, 159, 67, 0.1)",
                 tools: [
                     { text: "Preventivo per un cliente", icon: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z", action: "biz-preventivo" },
-                    { text: "Rispondi a recensione negativa", icon: "M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z", action: "biz-recensione" },
-                    { text: "Sollecito di pagamento", icon: "M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z", action: "biz-sollecito" },
