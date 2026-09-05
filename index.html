@@ -208,7 +208,7 @@
             border-color: #8b949e;
         }
 
-        /* Area di Output dei Risultati Corretta */
+        /* Area di Output dei Risultati - Modificata per massima compatibilità */
         .output-box {
             margin-top: 20px;
             padding: 15px;
@@ -282,19 +282,19 @@
             
             <div id="contenitore-bottoni" class="area-comandi"></div>
             
-            <!-- Box corretto di Output -->
+            <!-- Box di Output -->
             <div id="box-risultato" class="output-box"></div>
         </div>
 
     </div>
 
     <script>
+        // Database semplificato: rimosse le funzioni a freccia nidificate per stabilità totale mobile
         const configurazioneProfili = {
             casalinga: [
-                { testo: "Genera menu svuota-frigo rapido", azione: () => "💡 Idea Menu:\nPasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!" },
-                { testo: "Controlla scadenze e priorità domestiche", azione: () => "📅 Promemoria:\n• Controllare scadenza latte e yogurt in frigo.\n• Pagamento bolletta luce entro questo venerdì." },
-                { testo: "Crea lista della spesa intelligente", azione: () => "🛒 Lista Base Pronta:\nPane, uova, verdure a foglia verde, detersivo piatti, caffè. Puoi copiarla e integrarla!" }
+                { testo: "Genera menu svuota-frigo rapido", risp: "💡 Idea Menu:\nPasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!" },
+                { testo: "Controlla scadenze e priorità domestiche", risp: "📅 Promemoria:\n• Controllare scadenza latte e yogurt in frigo.\n• Pagamento bolletta luce entro questo venerdì." },
+                { testo: "Crea lista della spesa intelligente", risp: "🛒 Lista Base Pronta:\nPane, uova, verdure a foglia verde, detersivo piatti, caffè. Puoi copiarla e integrarla!" }
             ],
             studente: [
-                { testo: "Avvia Timer Studio Pomodoro", azione: () => "⏱️ Timer Avviato!\nConcentrati al massimo per 25 minuti senza distrazioni. Al termine avrai 5 minuti di pausa meritata." },
-                { testo: "Genera schema di ripasso generico", azione: () => "📝 Metodo di Studio efficace:\n1. Leggi i titoli dei capitoli.\n2. Evidenzia solo le parole chiave.\n3. Ripeti ad alta voce senza guardare il testo." },
+                { testo: "Avvia Timer Studio Pomodoro", risp: "⏱️ Timer Avviato!\nConcentrati al massimo per 25 minuti senza distrazioni. Al termine avrai 5 minuti di pausa meritata." },
