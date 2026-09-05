@@ -1,15 +1,196 @@
-            transition: all 0.2s ease-in-out;
-            text-align: left;
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova - Il tuo Assistente Personale</title>
+    <style>
+        /* RESET E STILE GENERALE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        .card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 159, 67, 0.3);
+        body {
+            background-color: #0d0e12;
+            color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 0;
+            top: 5px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            display: none; /* Appare solo dentro le categorie */
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .brand-icon-svg {
+            width: 32px;
+            height: 32px;
+            fill: #ff9f43;
+            filter: drop-shadow(0 0 8px rgba(255, 159, 67, 0.4));
+        }
+
+        .brand-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #8a8f98;
+        }
+
+        /* VISTE (HOME E DETTAGLI) */
+        .view {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* SCHEDE DI SELEZIONE PROFILO (HOME) */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-card:hover {
+            background: rgba(255, 255, 255, 0.05);
             transform: translateY(-2px);
         }
 
-        .card-icon-box {
-            background: rgba(255, 159, 67, 0.1);
+        .profile-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .profile-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* COLORI DEI PROFILI */
+        .p-biz { border-color: rgba(255, 159, 67, 0.2); }
+        .p-biz .profile-icon { background: rgba(255, 159, 67, 0.1); fill: #ff9f43; }
+        .p-biz:hover { border-color: #ff9f43; }
+
+        .p-student { border-color: rgba(52, 152, 219, 0.2); }
+        .p-student .profile-icon { background: rgba(52, 152, 219, 0.1); fill: #3498db; }
+        .p-student:hover { border-color: #3498db; }
+
+        .p-home { border-color: rgba(46, 204, 113, 0.2); }
+        .p-home .profile-icon { background: rgba(46, 204, 113, 0.1); fill: #2ecc71; }
+        .p-home:hover { border-color: #2ecc71; }
+
+        .p-mom { border-color: rgba(233, 30, 99, 0.2); }
+        .p-mom .profile-icon { background: rgba(233, 30, 99, 0.1); fill: #e91e63; }
+        .p-mom:hover { border-color: #e91e63; }
+
+        .p-health { border-color: rgba(155, 89, 182, 0.2); }
+        .p-health .profile-icon { background: rgba(155, 89, 182, 0.1); fill: #9b59b6; }
+        .p-health:hover { border-color: #9b59b6; }
+
+        /* GRIGLIA STRUMENTI INTERNI */
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8a8f98;
+            margin-bottom: 16px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .tool-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .tool-icon-box {
             width: 40px;
             height: 40px;
             border-radius: 10px;
@@ -18,67 +199,22 @@
             justify-content: center;
         }
 
-        .card-icon-box svg {
+        .tool-icon-box svg {
             width: 20px;
             height: 20px;
-            fill: #ff9f43;
         }
 
-        .card-text {
+        .tool-text {
             font-size: 15px;
             font-weight: 500;
             color: #e5e7eb;
             line-height: 1.4;
         }
 
-        /* INPUT SUGGERIMENTI IN BASSO */
-        .suggestions-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .suggestion-item {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 16px 20px;
-            color: #e5e7eb;
-            font-size: 14px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .suggestion-item:hover {
-            border-color: rgba(255, 159, 67, 0.3);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .suggestion-item svg {
-            width: 12px;
-            height: 12px;
-            fill: rgba(255, 255, 255, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .suggestion-item:hover svg {
-            transform: translateX(3px);
-            fill: #ff9f43;
-        }
-
-        /* ADATTAMENTO PER SMARTPHONE */
+        /* RESPONSIVE */
         @media (max-width: 500px) {
-            .grid-container {
+            .profile-grid, .tools-grid {
                 grid-template-columns: 1fr;
-            }
-            body {
-                padding: 30px 16px;
             }
         }
     </style>
@@ -87,81 +223,59 @@
 
     <div class="app-container">
         
-        <!-- INTESTAZIONE -->
         <header>
+            <button class="back-btn" id="backBtn" onclick="goBack()">← Indietro</button>
             <div class="brand-wrapper">
-                <!-- Icona Scintilla/Stella Nova -->
                 <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M12 2l2.4 7.2L22 11.6l-5.6 4.4L18.4 22 12 17.6 5.6 22l2-6-5.6-4.4 7.6-2.4z"/></svg>
                 <h1 class="brand-name">Nova</h1>
             </div>
-            <p class="tagline">Per chi manda avanti la propria attività</p>
+            <p class="tagline" id="appTagline">Scegli il tuo profilo per iniziare</p>
         </header>
 
-        <!-- BENVENUTO -->
-        <div class="welcome-box">
-            <h2 class="welcome-title">Ciao, sono Nova.</h2>
-            <p class="welcome-desc">L'assistente pensato per chi manda avanti un'attività: niente prompt complicati, solo gli strumenti che usi ogni giorno.</p>
-        </div>
-
-        <!-- SEZIONE DEI 4 BLOCCHI -->
-        <div>
-            <h3 class="section-title">Cosa devi fare oggi?</h3>
-            <div class="grid-container">
-                
-                <div class="card" onclick="handleAction('preventivo')">
-                    <div class="card-icon-box">
-                        <!-- Icona Documento -->
-                        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                    </div>
-                    <span class="card-text">Preventivo per un cliente</span>
+        <!-- VISTA 1: SELEZIONE PROFILO -->
+        <div id="homeView" class="view">
+            <div class="profile-grid">
+                <div class="profile-card p-biz" onclick="openCategory('business')">
+                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div>
+                    <span class="profile-title">Imprenditore</span>
                 </div>
-
-                <div class="card" onclick="handleAction('cliente-scontento')">
-                    <div class="card-icon-box">
-                        <!-- Icona Messaggio Triste -->
-                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.5 7.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 6 8.5 6 7 6.67 7 7.5 7.67 9.5 8.5 9.5zm3.5 5.5c-2.33 0-4.32-1.45-5.12-3.5h10.25c-.81 2.05-2.8 3.5-5.13 3.5z"/></svg>
-                    </div>
-                    <span class="card-text">Rispondere a un cliente scontento</span>
+                <div class="profile-card p-student" onclick="openCategory('student')">
+                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div>
+                    <span class="profile-title">Studente</span>
                 </div>
-
-                <div class="card" onclick="handleAction('sollecito')">
-                    <div class="card-icon-box">
-                        <!-- Icona Denaro/Pagamento -->
-                        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-                    </div>
-                    <span class="card-text">Sollecito di pagamento</span>
+                <div class="profile-card p-home" onclick="openCategory('home')">
+                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+                    <span class="profile-title">Casalinga</span>
                 </div>
-
-                <div class="card" onclick="handleAction('social')">
-                    <div class="card-icon-box">
-                        <!-- Icona Condivisione/Social -->
-                        <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-                    </div>
-                    <span class="card-text">Post per i social</span>
+                <div class="profile-card p-mom" onclick="openCategory('mom')">
+                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+                    <span class="profile-title">Mamma</span>
                 </div>
-
+                <div class="profile-card p-health" onclick="openCategory('health')">
+                    <div class="profile-icon"><svg viewBox="0 0 24 24"><path d="M19 10.5h-5.5V5h-3v5.5H5v3h5.5V19h3v-5.5H19v-3z"/></svg></div>
+                    <span class="profile-title">Sanità / Salute</span>
+                </div>
             </div>
         </div>
 
-        <!-- SEZIONE INPUT/SUGGERIMENTI -->
-        <div>
-            <h3 class="section-title">Oppure</h3>
-            <div class="suggestions-container">
-                <div class="suggestion-item" onclick="handleAction('email')">
-                    <span>Scrivimi un'email professionale</span>
-                    <svg viewBox="0 0 24 24"><path d="M5.88 4.12L13.76 12l-7.88 7.88L8 22l10-10L8 2z"/></svg>
-                </div>
-                <div class="suggestion-item" onclick="handleAction('riassunto')">
-                    <span>Riassumi un testo per me</span>
-                    <svg viewBox="0 0 24 24"><path d="M5.88 4.12L13.76 12l-7.88 7.88L8 22l10-10L8 2z"/></svg>
-                </div>
-                <div class="suggestion-item" onclick="handleAction('spiegazione')">
-                    <span>Spiegami qualcosa in modo semplice</span>
-                    <svg viewBox="0 0 24 24"><path d="M5.88 4.12L13.76 12l-7.88 7.88L8 22l10-10L8 2z"/></svg>
-                </div>
+        <!-- VISTA 2: STRUMENTI DELLA CATEGORIA SELEZIONATA -->
+        <div id="categoryView" class="view hidden">
+            <h3 class="section-title" id="categoryTitle">Strumenti disponibili</h3>
+            <div class="tools-grid" id="toolsContainer">
+                <!-- I pulsanti vengono inseriti qui in automatico dal codice JavaScript sotto -->
             </div>
         </div>
 
     </div>
 
     <script>
+        // Database dei contenuti per ogni singola categoria
+        const data = {
+            business: {
+                tagline: "Strumenti di intelligenza artificiale per il tuo business",
+                color: "#ff9f43",
+                bg: "rgba(255, 159, 67, 0.1)",
+                tools: [
+                    { text: "Preventivo per un cliente", icon: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z", action: "biz-preventivo" },
+                    { text: "Rispondi a recensione negativa", icon: "M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z", action: "biz-recensione" },
+                    { text: "Sollecito di pagamento", icon: "M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z", action: "biz-sollecito" },
