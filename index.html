@@ -54,31 +54,14 @@
             max-width: 650px;
         }
 
-        /* Gestione Schermate tramite CSS puro Target (Infallibile su Android) */
-        .sezione-app {
-            display: none;
-        }
-
-        #schermata-home {
-            display: block;
-        }
-
-        :target {
-            display: block !important;
-        }
-
-        :target ~ #schermata-home {
-            display: none !important;
-        }
-
-        /* Griglia di Selezione */
+        /* Griglia dei Profili Iniziale */
         .grid-profili {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
-        .profilo-link {
+        .profilo-btn {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
@@ -86,16 +69,15 @@
             color: white;
             font-size: 1.1rem;
             font-weight: 600;
-            text-decoration: none;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
             text-align: center;
-            transition: border-color 0.2s;
         }
 
-        .profilo-link:active {
+        .profilo-btn:active {
             border-color: var(--accent-color);
             background-color: #1f242c;
         }
@@ -110,8 +92,9 @@
             font-size: 2rem;
         }
 
-        /* Struttura Box Chat */
+        /* Schermata della Chat */
         .box-chat-completo {
+            display: none; /* Nascosta di base, attivata via JS */
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -119,12 +102,14 @@
         }
 
         .btn-torna-su {
-            display: inline-block;
+            background: none;
+            border: none;
             color: var(--text-muted);
-            text-decoration: none;
             margin-bottom: 15px;
             font-size: 1rem;
             font-weight: bold;
+            cursor: pointer;
+            text-align: left;
         }
 
         .btn-torna-su:hover {
@@ -149,6 +134,7 @@
             white-space: pre-wrap;
             margin-bottom: 20px;
             color: #e6edf3;
+            min-height: 100px;
         }
 
         .input-chat-container {
@@ -186,84 +172,91 @@
 
     <div class="container">
 
-        <!-- 1. CHAT CASALINGA -->
-        <div id="profilo-casalinga" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">🏠 Chat Casalinga</h2>
-            <div id="risposta-casalinga" class="area-testo-risposta">Ciao! Sono la tua assistente domestica Nova. Chiedimi idee per ricette, gestione spese o liste della spesa intelligenti!</div>
+        <!-- SCHERMATA PRINCIPALE (HOME) -->
+        <div id="schermata-home" class="grid-profili">
+            <button class="profilo-btn" onclick="apriSezione('casalinga', '🏠 Chat Casalinga', 'Ciao! Sono la tua assistente domestica Nova. Chiedimi idee per ricette, gestione spese o liste della spesa!')">
+                <span class="icona">🏠</span>Casalinga
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('studente', '🎓 Chat Studente', 'Ehi! Sono il tuo tutor personale Nova. Incolla i tuoi argomenti o chiedimi schemi per studiare!')">
+                <span class="icona">🎓</span>Studente
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('dottore', '🩺 Chat Dottore', 'Benvenuto nel modulo di supporto clinico Nova. Come posso esserti utile nell\'organizzazione delle visite?')">
+                <span class="icona">🩺</span>Dottore
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('astronomo', '🚀 Chat Astronomo', 'Sistema di calcolo cosmico Nova attivo. Chiedimi distanze stellari o coordinate di osservazione.')">
+                <span class="icona">🚀</span>Astronomo
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('ricercatore', '🔬 Chat Ricercatore', 'Benvenuto nei laboratori Nova. Sono pronto ad aiutarti con formati di citazione o dati statistici.')">
+                <span class="icona">🔬</span>Ricercatore
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('ingegnere', '💻 Chat Ingegnere & Dev', 'Console di sviluppo attiva. Chiedimi setup di codice, comandi terminali o risoluzione di bug.')">
+                <span class="icona">💻</span>Ingegnere & Dev
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('chef', '👨‍🍳 Chat Chef & Cucina', 'Chef, ai tuoi ordini! Chiedimi combinazioni di sapori, ricette o tabelle di cottura.')">
+                <span class="icona">👨‍🍳</span>Chef & Cucina
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('artista', '🎨 Chat Artista & Creativo', 'Spazio creativo attivo. Chiedimi palette colori, idee di design o esercizi grafici.')">
+                <span class="icona">🎨</span>Artista & Creativo
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('avvocato', '⚖️ Chat Avvocato', 'Studio legale virtuale Nova attivo. Posso assisterti nella struttura di atti o scadenze.')">
+                <span class="icona">⚖️</span>Avvocato
+            </button>
+            <button class="profilo-btn" onclick="apriSezione('insegnante', '🍎 Chat Insegnante', 'Buongiorno docente! Sono a disposizione per creare schemi di lezioni o attività didattiche.')">
+                <span class="icona">🍎</span>Insegnante
+            </button>
+            <button class="profilo-btn btn-cerca-altro" onclick="apriSezione('cerca', '🔍 Chat Profilo Personalizzato', 'Scrivi qui sotto qualunque professione (es. Meccanico, Fotografo) ed io mi adatterò per aiutarti!')">
+                <span class="icona">🔍</span>Cerca o inventa un altro profilo...
+            </button>
+        </div>
+
+        <!-- AREA CHAT UNICA DINAMICA (Sblocca la memoria visiva) -->
+        <div id="schermata-chat" class="box-chat-completo">
+            <button class="btn-torna-su" onclick="chiudiSezione()">← Torna alla lista</button>
+            <h2 id="titolo-corrente" class="titolo-chat">Chat</h2>
+            <div id="box-testo-risposta" class="area-testo-risposta">In attesa...</div>
             <div class="input-chat-container">
-                <input type="text" id="ins-casalinga" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('casalinga')">Invia</button>
+                <input type="text" id="ins-testo-utente" class="input-casella" placeholder="Scrivi un messaggio...">
+                <button class="btn-invia-chat" onclick="inviaMessaggioIa()">Invia</button>
             </div>
         </div>
 
-        <!-- 2. CHAT STUDENTE -->
-        <div id="profilo-studente" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">🎓 Chat Studente</h2>
-            <div id="risposta-studente" class="area-testo-risposta">Ehi! Sono il tuo tutor personale Nova. Incolla i tuoi argomenti o chiedimi schemi per memorizzare velocemente!</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-studente" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('studente')">Invia</button>
-            </div>
-        </div>
+    </div>
 
-        <!-- 3. CHAT DOTTORE -->
-        <div id="profilo-dottore" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">🩺 Chat Dottore</h2>
-            <div id="risposta-dottore" class="area-testo-risposta">Benvenuto nel modulo di supporto clinico Nova. Come posso aiutarti nell'organizzazione o nella struttura dei tuoi schemi di visita?</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-dottore" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('dottore')">Invia</button>
-            </div>
-        </div>
+    <script>
+        let tipoProfiloAttivo = '';
+        let testoBenvenutoIniziale = '';
 
-        <!-- 4. CHAT ASTRONOMO -->
-        <div id="profilo-astronomo" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">🚀 Chat Astronomo</h2>
-            <div id="risposta-astronomo" class="area-testo-risposta">Sistema di calcolo cosmico Nova attivo. Chiedimi distanze stellari, eventi celesti o coordinate di osservazione.</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-astronomo" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('astronomo')">Invia</button>
-            </div>
-        </div>
+        // Funzione per mostrare la chat del profilo cliccato
+        function apriSezione(tipo, titolo, benvenuto) {
+            tipoProfiloAttivo = tipo;
+            testoBenvenutoIniziale = benvenuto;
 
-        <!-- 5. CHAT RICERCATORE -->
-        <div id="profilo-ricercatore" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">🔬 Chat Ricercatore</h2>
-            <div id="risposta-ricercatore" class="area-testo-risposta">Benvenuto nei laboratori Nova. Sono pronto ad aiutarti con formati di citazione accademiche e concetti statistici.</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-ricercatore" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('ricercatore')">Invia</button>
-            </div>
-        </div>
+            // Scambio schermate pulito controllato da JS
+            document.getElementById('schermata-home').style.display = 'none';
+            document.getElementById('schermata-chat').style.display = 'block';
+            
+            // Imposta i testi corretti
+            document.getElementById('titolo-corrente').innerText = titolo;
+            document.getElementById('box-testo-risposta').innerText = benvenuto;
+            document.getElementById('ins-testo-utente').value = '';
+        }
 
-        <!-- 6. CHAT INGEGNERE -->
-        <div id="profilo-ingegnere" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">💻 Chat Ingegnere & Dev</h2>
-            <div id="risposta-ingegnere" class="area-testo-risposta">Console di sviluppo attiva. Chiedimi setup di codice, comandi terminali o risoluzione di bug.</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-ingegnere" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('ingegnere')">Invia</button>
-            </div>
-        </div>
+        // Funzione per tornare indietro alla lista
+        function chiudiSezione() {
+            document.getElementById('schermata-chat').style.display = 'none';
+            document.getElementById('schermata-home').style.display = 'grid';
+        }
 
-        <!-- 7. CHAT CHEF -->
-        <div id="profilo-chef" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">👨‍🍳 Chat Chef & Cucina</h2>
-            <div id="risposta-chef" class="area-testo-risposta">Chef, ai tuoi ordini! Chiedimi combinazioni di sapori, ricette professionali o tabelle di cottura dei cibi.</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-chef" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="parlaConIa('chef')">Invia</button>
-            </div>
-        </div>
+        // Gestore risposte IA della chat
+        function inviaMessaggioIa() {
+            const inputField = document.getElementById('ins-testo-utente');
+            const boxRisposta = document.getElementById('box-testo-risposta');
+            
+            const testo = inputField.value.trim();
+            if(testo === '') return;
 
-        <!-- 8. CHAT ARTISTA -->
-        <div id="profilo-artista" class="sezione-app box-chat-completo">
-            <a href="#" class="btn-torna-su">← Torna alla lista</a>
-            <h2 class="titolo-chat">🎨 Chat Artista & Creativo</h2>
+            const testoMinuscolo = testo.toLowerCase();
+            let rispostaGenerata = "✨ Ho preso nota della tua richiesta per questo profilo. Dimmi pure come desideri procedere per approfondire!";
+
+            // Risposte immediate basate sull'identità scelta
+            if (tipoProfiloAttivo === 'casalinga') {
