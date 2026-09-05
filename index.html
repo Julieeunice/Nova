@@ -40,7 +40,13 @@
   .msg.user { align-self: flex-end; }
   .msg.nova { align-self: flex-start; }
   .bubble { padding: 11px 15px; border-radius: 16px; font-size: 14.5px; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; }
+  .bubble strong { font-weight: 700; }
+  .bubble em { font-style: italic; }
+  .bubble ul { margin: 6px 0 6px 18px; padding: 0; }
+  .bubble li { margin-bottom: 4px; }
+  .bubble code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
   .msg.user .bubble { background: var(--accent); color: #1A1108; border-bottom-right-radius: 4px; }
+  .msg.user .bubble code { background: rgba(0,0,0,0.15); }
   .msg.nova .bubble { background: var(--bubble-nova); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
   .typing { display: flex; gap: 4px; padding: 4px 0; }
   .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-secondary); animation: bounce 1.2s infinite; }
@@ -115,7 +121,7 @@ const quotaBadge = document.getElementById('quota-badge');
 const limitBanner = document.getElementById('limit-banner');
 
 function todayKey() {
-  return new Date().toISOString().slice(0, 10); // es. "2026-09-05"
+  return new Date().toISOString().slice(0, 10);
 }
 
 function getQuota() {
@@ -190,6 +196,46 @@ function renderEmptyState() {
   });
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Formattazione leggera: grassetto **testo**, corsivo *testo*, `codice`, elenchi puntati con - o *
+function formatMessage(raw) {
+  const escaped = escapeHtml(raw);
+  const lines = escaped.split('\n');
+  let html = '';
+  let inList = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const isListItem = /^[-*]\s+/.test(trimmed);
+
+    if (isListItem) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${inlineFormat(trimmed.replace(/^[-*]\s+/, ''))}</li>`;
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      if (trimmed === '') {
+        html += '<br>';
+      } else {
+        html += inlineFormat(line) + '\n';
+      }
+    }
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+
+function inlineFormat(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/(?<!\*)\*(?!\*)(.+?)\*(?!\*)/g, '<em>$1</em>');
+}
+
 function renderMessages() {
   if (conversation.length === 0) {
     renderEmptyState();
@@ -197,16 +243,10 @@ function renderMessages() {
   }
   messagesEl.innerHTML = conversation.map(m => `
     <div class="msg ${m.role === 'user' ? 'user' : 'nova'}">
-      <div class="bubble">${escapeHtml(m.content)}</div>
+      <div class="bubble">${m.role === 'user' ? escapeHtml(m.content) : formatMessage(m.content)}</div>
     </div>
   `).join('');
   messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
 }
 
 function showTyping() {
