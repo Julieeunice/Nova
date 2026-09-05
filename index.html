@@ -208,7 +208,7 @@
             border-color: #8b949e;
         }
 
-        /* Area di Output dei Risultati */
+        /* Area di Output dei Risultati Corretta */
         .output-box {
             margin-top: 20px;
             padding: 15px;
@@ -216,9 +216,10 @@
             border-radius: 6px;
             border-left: 4px solid var(--accent-color);
             display: none;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            white-space: pre-line;
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: #e6edf3;
         }
     </style>
 </head>
@@ -264,7 +265,6 @@
                 <span class="icona">🍎</span> Insegnante
             </button>
             
-            <!-- NUOVO BOTTONE: APRENDO QUESTO TROVERANNO CIÒ CHE CERCANO -->
             <button class="btn-special-search" onclick="apriInterfacciaRicerca()">
                 <span class="icona">🔍</span> Non trovi il tuo profilo? Cerca Altro...
             </button>
@@ -275,27 +275,26 @@
             <button class="btn-indietro" onclick="tornaAllaHome()">← Torna alla Home</button>
             <h2 id="titolo-profilo-attivo" class="titolo-profilo">Profilo</h2>
             
-            <!-- Box di ricerca visibile solo nella modalità di ricerca personalizzata -->
             <div id="area-ricerca-personalizzata" class="search-box-container" style="display: none;">
-                <input type="text" id="input-lavoro-personalizzato" class="search-input" placeholder="Es. Meccanico, Fotografo, Scrittore, Sportivo...">
+                <input type="text" id="input-lavoro-personalizzato" class="search-input" placeholder="Es. Meccanico, Fotografo, Scrittore...">
                 <button class="search-submit-btn" onclick="generaProfiloSuMisura()">Crea Strumenti</button>
             </div>
             
-            <!-- Contenitore dinamico dei bottoni del profilo -->
             <div id="contenitore-bottoni" class="area-comandi"></div>
             
-            <!-- Box dove appaiono i risultati dei bottoni -->
+            <!-- Box corretto di Output -->
             <div id="box-risultato" class="output-box"></div>
         </div>
 
     </div>
 
     <script>
-        // Database fisso dei profili principali
         const configurazioneProfili = {
             casalinga: [
-                { testo: "Genera menu svuota-frigo rapido", azione: () => "💡 **Idea Menu:** Pasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!" },
-                { testo: "Controlla scadenze e priorità domestiche", azione: () => "📅 **Promemoria:**\n• Controllare scadenza latte e yogurt in frigo.\n• Pagamento bolletta luce entro questo venerdì." },
-                { testo: "Crea lista della spesa intelligente", azione: () => "🛒 **Lista Base Pronta:** Pane, uova, verdure a foglia verde, detersivo piatti, caffè. Puoi copiarla e integrarla!" }
+                { testo: "Genera menu svuota-frigo rapido", azione: () => "💡 Idea Menu:\nPasta saltata con quel che c'è, frittata mista svuota-frigo e macedonia di stagione. Zero sprechi!" },
+                { testo: "Controlla scadenze e priorità domestiche", azione: () => "📅 Promemoria:\n• Controllare scadenza latte e yogurt in frigo.\n• Pagamento bolletta luce entro questo venerdì." },
+                { testo: "Crea lista della spesa intelligente", azione: () => "🛒 Lista Base Pronta:\nPane, uova, verdure a foglia verde, detersivo piatti, caffè. Puoi copiarla e integrarla!" }
             ],
             studente: [
+                { testo: "Avvia Timer Studio Pomodoro", azione: () => "⏱️ Timer Avviato!\nConcentrati al massimo per 25 minuti senza distrazioni. Al termine avrai 5 minuti di pausa meritata." },
+                { testo: "Genera schema di ripasso generico", azione: () => "📝 Metodo di Studio efficace:\n1. Leggi i titoli dei capitoli.\n2. Evidenzia solo le parole chiave.\n3. Ripeti ad alta voce senza guardare il testo." },
