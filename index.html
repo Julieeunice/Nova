@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova - Scegli il tuo profilo</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://jsdelivr.net"></script>
-  <!-- Font Awesome per le icone -->
-  <link rel="stylesheet" href="https://cloudflare.com">
+  <title>Nova</title>
+  <!-- Tailwind CSS CDN Standard Stabile per il Deployment su Vercel -->
+  <script src="https://tailwindcss.com"></script>
 </head>
 <body class="bg-[#0e131f] text-gray-200 min-h-screen flex flex-col items-center justify-start p-6 font-sans select-none">
 
@@ -16,7 +14,7 @@
     <h1 class="text-3xl font-bold text-white flex items-center justify-center gap-2">
       <span class="text-white">★</span> Nova
     </h1>
-    <p class="text-gray-400 text-sm mt-2">Scegli il tuo profilo o cerca quello perfetto per te</p>
+    <p class="text-gray-400 text-sm mt-2">Scegli un profilo ed entra in chat con l'IA</p>
   </header>
 
   <!-- Griglia Profili -->
@@ -24,111 +22,103 @@
     
     <!-- Casalinga -->
     <div data-profile="Casalinga" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-house text-[#e07a5f] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">🏠</span>
       <span class="text-sm font-semibold text-gray-300">Casalinga</span>
     </div>
 
     <!-- Studente -->
     <div data-profile="Studente" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-graduation-cap text-[#3d5a80] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">🎓</span>
       <span class="text-sm font-semibold text-gray-300">Studente</span>
     </div>
 
     <!-- Dottore -->
     <div data-profile="Dottore" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-stethoscope text-[#98c1d9] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">🩺</span>
       <span class="text-sm font-semibold text-gray-300">Dottore</span>
     </div>
 
     <!-- Astronomo -->
     <div data-profile="Astronomo" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-rocket text-[#ee6c4d] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">🚀</span>
       <span class="text-sm font-semibold text-gray-300">Astronomo</span>
     </div>
 
     <!-- Ricercatore -->
     <div data-profile="Ricercatore" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-microscope text-[#81b29a] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">🔬</span>
       <span class="text-sm font-semibold text-gray-300">Ricercatore</span>
     </div>
 
     <!-- Ingegnere & Dev -->
     <div data-profile="Ingegnere & Dev" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-laptop text-[#2a9d8f] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">💻</span>
       <span class="text-sm font-semibold text-gray-300">Ingegnere & Dev</span>
     </div>
 
-    <!-- Chef & Cucina (Attivo di default come nello screenshot) -->
-    <div data-profile="Chef & Cucina" class="profile-card bg-[#131a26] border-2 border-[#38b000] rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer text-center">
-      <i class="fa-solid fa-utensils text-[#f4a261] text-2xl mb-2"></i>
-      <span class="text-sm font-semibold text-white">Chef & Cucina</span>
+    <!-- Chef & Cucina -->
+    <div data-profile="Chef & Cucina" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
+      <span class="text-3xl mb-2">🧑‍🍳</span>
+      <span class="text-sm font-semibold text-gray-300">Chef & Cucina</span>
     </div>
 
     <!-- Artista & Creativo -->
     <div data-profile="Artista & Creativo" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-palette text-[#e9c46a] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">🎨</span>
       <span class="text-sm font-semibold text-gray-300">Artista & Creativo</span>
     </div>
 
     <!-- Avvocato -->
     <div data-profile="Avvocato" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-scale-balanced text-[#a8dadc] text-2xl mb-2"></i>
+      <span class="text-3xl mb-2">⚖️</span>
       <span class="text-sm font-semibold text-gray-300">Avvocato</span>
     </div>
 
-    <!-- Insegnante -->
-    <div data-profile="Insegnante" class="profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-apple-whole text-[#e63946] text-2xl mb-2"></i>
-      <span class="text-sm font-semibold text-gray-300">Insegnante</span>
+    <!-- Insegnante (Selezionato di default con bordo verde) -->
+    <div data-profile="Insegnante" class="profile-card bg-[#131a26] border-2 border-[#1e5c37] rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer text-center">
+      <span class="text-3xl mb-2">🍎</span>
+      <span class="text-sm font-semibold text-white">Insegnante</span>
     </div>
 
   </main>
 
-  <!-- Pulsante di ricerca inferiore -->
+  <!-- Pulsante inferiore -->
   <footer class="w-full max-w-2xl mt-4 px-2">
     <div id="search-btn" class="bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center">
-      <i class="fa-solid fa-magnifying-glass text-[#4cc9f0] text-xl mb-2"></i>
-      <span class="text-sm font-medium text-[#4cc9f0]">Non trovi il tuo profilo? Cerca Altro...</span>
+      <span class="text-xl mb-2">🔍</span>
+      <span class="text-sm font-medium text-[#4cc9f0]">Cerca o inventa un altro profilo...</span>
     </div>
   </footer>
 
-  <!-- Logica JavaScript Interattiva -->
+  <!-- Script di funzionamento per la selezione interattiva -->
   <script>
     const cards = document.querySelectorAll('.profile-card');
-    const searchBtn = document.getElementById('search-btn');
 
     cards.forEach(card => {
       card.addEventListener('click', () => {
-        // Rimuove lo stato attivo (bordo verde e testo bianco) da tutte le schede
+        // Deseleziona tutte le schede (bordo scuro e testo grigio)
         cards.forEach(c => {
-          c.classList.remove('border-2', 'border-[#38b000]');
-          c.classList.add('border', 'border-gray-800');
-          const text = c.querySelector('span');
-          if (text) {
-            text.classList.remove('text-white');
-            text.classList.add('text-gray-300');
+          c.className = "profile-card bg-[#131a26] border border-gray-800 rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer hover:border-gray-700 transition duration-200 text-center";
+          const textSpan = c.querySelectorAll('span')[1];
+          if (textSpan) {
+            textSpan.className = "text-sm font-semibold text-gray-300";
           }
         });
 
-        // Applica lo stato attivo alla scheda cliccata
-        card.classList.remove('border', 'border-gray-800');
-        card.classList.add('border-2', 'border-[#38b000]');
-        const activeText = card.querySelector('span');
-        if (activeText) {
-          activeText.classList.remove('text-gray-300');
-          activeText.classList.add('text-white');
+        // Seleziona la scheda cliccata (bordo verde e testo bianco)
+        card.className = "profile-card bg-[#131a26] border-2 border-[#1e5c37] rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer text-center";
+        const activeTextSpan = card.querySelectorAll('span')[1];
+        if (activeTextSpan) {
+          activeTextSpan.className = "text-sm font-semibold text-white";
         }
 
-        // Azione: logga il profilo selezionato
-        const profileName = card.getAttribute('data-profile');
-        console.log("Profilo selezionato:", profileName);
+        console.log("Profilo attivo selezionato:", card.getAttribute('data-profile'));
       });
     });
 
-    // Azione per il pulsante di ricerca
-    searchBtn.addEventListener('click', () => {
-      console.log("Apertura ricerca altri profili...");
-      alert("Funzione di ricerca in arrivo!");
+    // Evento per il tasto di ricerca inferiore
+    document.getElementById('search-btn').addEventListener('click', () => {
+      alert("Funzione di ricerca o creazione profilo attivata!");
     });
   </script>
 
