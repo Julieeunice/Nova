@@ -1,4 +1,6 @@
 {
-  "cleanUrls": true,
-  "framework": null
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/chat.js" },
+    { "source": "/.netlify/functions/(.*)", "destination": "/api/chat.js" }
+  ]
 }
