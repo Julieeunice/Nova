@@ -1,262 +1,78 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova - L'Assistente Universale</title>
-    <style>
-        :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --accent-color: #2ea44f;
-            --border-color: #30363d;
-            --text-color: #c9d1d9;
-            --text-muted: #8b949e;
+<script>
+    let tipoProfiloAttivo = '';
+    let testoBenvenutoIniziale = '';
+
+    // Funzione per mostrare la chat del profilo cliccato
+    function apriSezione(tipo, titolo, benvenuto) {
+        tipoProfiloAttivo = tipo;
+        testoBenvenutoIniziale = benvenuto;
+
+        // Scambio schermate pulito controllato da JS
+        document.getElementById('schermata-home').style.display = 'none';
+        document.getElementById('schermata-chat').style.display = 'block';
+
+        // Imposta i testi corretti
+        document.getElementById('titolo-corrente').innerText = titolo;
+        document.getElementById('box-testo-risposta').innerText = benvenuto;
+        document.getElementById('ins-testo-utente').value = '';
+    }
+
+    // Funzione per tornare indietro alla lista
+    function chiudiSezione() {
+        document.getElementById('schermata-chat').style.display = 'none';
+        document.getElementById('schermata-home').style.display = 'grid';
+    }
+
+    // Gestore risposte IA della chat
+    function inviaMessaggioIa() {
+        const inputField = document.getElementById('ins-testo-utente');
+        const boxRisposta = document.getElementById('box-testo-risposta');
+
+        const testo = inputField.value.trim();
+        if (testo === '') return;
+
+        const testoMinuscolo = testo.toLowerCase();
+        let rispostaGenerata = "✨ Ho preso nota della tua richiesta per questo profilo. Dimmi pure come desideri procedere per approfondire!";
+
+        // Risposte immediate basate sull'identità scelta
+        if (tipoProfiloAttivo === 'casalinga') {
+            rispostaGenerata = "🏠 Ottima domanda! Per la gestione della casa, ti consiglio di iniziare organizzando una lista della spesa settimanale e un piano dei pasti. Vuoi che ti aiuti a crearne uno insieme, con budget e ricette suggerite?";
+        } else if (tipoProfiloAttivo === 'studente') {
+            rispostaGenerata = "🎓 Capito! Per studiare in modo efficace, ti consiglio la tecnica del ripasso attivo: rileggi gli appunti, poi prova a spiegarli a voce alta senza guardarli. Vuoi che ti prepari uno schema di ripasso su questo argomento?";
+        } else if (tipoProfiloAttivo === 'dottore') {
+            rispostaGenerata = "🩺 Ricevuto. Per l'organizzazione clinica, posso aiutarti a strutturare l'agenda visite, preparare promemoria per i pazienti o riassumere informazioni cliniche generali. Su cosa vuoi concentrarti?";
+        } else if (tipoProfiloAttivo === 'astronomo') {
+            rispostaGenerata = "🚀 Sistema di calcolo cosmico attivo. Posso aiutarti con distanze stellari, coordinate di osservazione o spiegazioni su fenomeni astronomici. Dimmi quale corpo celeste o calcolo ti interessa.";
+        } else if (tipoProfiloAttivo === 'ricercatore') {
+            rispostaGenerata = "🔬 Perfetto, sono pronta ad aiutarti nei laboratori Nova. Posso assisterti con formati di citazione, organizzazione di dati statistici o struttura di una bozza di paper. Da dove vuoi partire?";
+        } else if (tipoProfiloAttivo === 'ingegnere') {
+            rispostaGenerata = "💻 Console di sviluppo attiva. Posso aiutarti con setup di codice, comandi terminali o risoluzione di bug. Descrivimi il problema o l'ambiente su cui stai lavorando.";
+        } else if (tipoProfiloAttivo === 'chef') {
+            rispostaGenerata = "👨‍🍳 Chef, ai tuoi ordini! Posso suggerirti combinazioni di sapori, ricette su misura o tabelle di cottura precise. Dimmi che ingredienti hai a disposizione o cosa vuoi preparare.";
+        } else if (tipoProfiloAttivo === 'artista') {
+            rispostaGenerata = "🎨 Spazio creativo attivo. Posso proporti palette di colori, idee di design o esercizi grafici per allenare la creatività. Che tipo di progetto hai in mente?";
+        } else if (tipoProfiloAttivo === 'avvocato') {
+            rispostaGenerata = "⚖️ Modulo legale pronto. Posso aiutarti a strutturare bozze di documenti, riassumere riferimenti normativi generali o organizzare scadenze. Su quale ambito vuoi lavorare?";
+        } else if (tipoProfiloAttivo === 'insegnante') {
+            rispostaGenerata = "📚 Aula virtuale pronta. Posso aiutarti a preparare piani di lezione, esercizi per gli studenti o metodi di verifica dell'apprendimento. Che materia o argomento stai trattando?";
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        boxRisposta.innerText = rispostaGenerata;
+        inputField.value = '';
+    }
+
+    // Permette di inviare il messaggio anche premendo Invio
+    document.addEventListener('DOMContentLoaded', function () {
+        const campo = document.getElementById('ins-testo-utente');
+        if (campo) {
+            campo.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    inviaMessaggioIa();
+                }
+            });
         }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            width: 100%;
-            max-width: 650px;
-        }
-
-        header h1 {
-            font-size: 2.2rem;
-            color: #ffffff;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 650px;
-        }
-
-        /* Griglia dei Profili Iniziale */
-        .grid-profili {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .profilo-btn {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 22px 15px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            text-align: center;
-        }
-
-        .profilo-btn:active {
-            border-color: var(--accent-color);
-            background-color: #1f242c;
-        }
-
-        .btn-cerca-altro {
-            grid-column: span 2;
-            border: 1px dashed #58a6ff;
-            color: #58a6ff;
-        }
-
-        .icona {
-            font-size: 2rem;
-        }
-
-        /* Schermata della Chat */
-        .box-chat-completo {
-            display: none; /* Nascosta di base, attivata via JS */
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .btn-torna-su {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .btn-torna-su:hover {
-            color: white;
-        }
-
-        .titolo-chat {
-            font-size: 1.5rem;
-            color: white;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .area-testo-risposta {
-            background-color: #0d1117;
-            border-left: 4px solid var(--accent-color);
-            padding: 15px;
-            border-radius: 6px;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            margin-bottom: 20px;
-            color: #e6edf3;
-            min-height: 100px;
-        }
-
-        .input-chat-container {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-casella {
-            flex: 1;
-            background-color: #0d1117;
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            border-radius: 6px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .btn-invia-chat {
-            background-color: var(--accent-color);
-            border: none;
-            color: white;
-            padding: 0 20px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>★ Nova</h1>
-        <p>Scegli un profilo ed entra in chat con l'IA</p>
-    </header>
-
-    <div class="container">
-
-        <!-- SCHERMATA PRINCIPALE (HOME) -->
-        <div id="schermata-home" class="grid-profili">
-            <button class="profilo-btn" onclick="apriSezione('casalinga', '🏠 Chat Casalinga', 'Ciao! Sono la tua assistente domestica Nova. Chiedimi idee per ricette, gestione spese o liste della spesa!')">
-                <span class="icona">🏠</span>Casalinga
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('studente', '🎓 Chat Studente', 'Ehi! Sono il tuo tutor personale Nova. Incolla i tuoi argomenti o chiedimi schemi per studiare!')">
-                <span class="icona">🎓</span>Studente
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('dottore', '🩺 Chat Dottore', 'Benvenuto nel modulo di supporto clinico Nova. Come posso esserti utile nell\'organizzazione delle visite?')">
-                <span class="icona">🩺</span>Dottore
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('astronomo', '🚀 Chat Astronomo', 'Sistema di calcolo cosmico Nova attivo. Chiedimi distanze stellari o coordinate di osservazione.')">
-                <span class="icona">🚀</span>Astronomo
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('ricercatore', '🔬 Chat Ricercatore', 'Benvenuto nei laboratori Nova. Sono pronto ad aiutarti con formati di citazione o dati statistici.')">
-                <span class="icona">🔬</span>Ricercatore
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('ingegnere', '💻 Chat Ingegnere & Dev', 'Console di sviluppo attiva. Chiedimi setup di codice, comandi terminali o risoluzione di bug.')">
-                <span class="icona">💻</span>Ingegnere & Dev
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('chef', '👨‍🍳 Chat Chef & Cucina', 'Chef, ai tuoi ordini! Chiedimi combinazioni di sapori, ricette o tabelle di cottura.')">
-                <span class="icona">👨‍🍳</span>Chef & Cucina
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('artista', '🎨 Chat Artista & Creativo', 'Spazio creativo attivo. Chiedimi palette colori, idee di design o esercizi grafici.')">
-                <span class="icona">🎨</span>Artista & Creativo
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('avvocato', '⚖️ Chat Avvocato', 'Studio legale virtuale Nova attivo. Posso assisterti nella struttura di atti o scadenze.')">
-                <span class="icona">⚖️</span>Avvocato
-            </button>
-            <button class="profilo-btn" onclick="apriSezione('insegnante', '🍎 Chat Insegnante', 'Buongiorno docente! Sono a disposizione per creare schemi di lezioni o attività didattiche.')">
-                <span class="icona">🍎</span>Insegnante
-            </button>
-            <button class="profilo-btn btn-cerca-altro" onclick="apriSezione('cerca', '🔍 Chat Profilo Personalizzato', 'Scrivi qui sotto qualunque professione (es. Meccanico, Fotografo) ed io mi adatterò per aiutarti!')">
-                <span class="icona">🔍</span>Cerca o inventa un altro profilo...
-            </button>
-        </div>
-
-        <!-- AREA CHAT UNICA DINAMICA (Sblocca la memoria visiva) -->
-        <div id="schermata-chat" class="box-chat-completo">
-            <button class="btn-torna-su" onclick="chiudiSezione()">← Torna alla lista</button>
-            <h2 id="titolo-corrente" class="titolo-chat">Chat</h2>
-            <div id="box-testo-risposta" class="area-testo-risposta">In attesa...</div>
-            <div class="input-chat-container">
-                <input type="text" id="ins-testo-utente" class="input-casella" placeholder="Scrivi un messaggio...">
-                <button class="btn-invia-chat" onclick="inviaMessaggioIa()">Invia</button>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        let tipoProfiloAttivo = '';
-        let testoBenvenutoIniziale = '';
-
-        // Funzione per mostrare la chat del profilo cliccato
-        function apriSezione(tipo, titolo, benvenuto) {
-            tipoProfiloAttivo = tipo;
-            testoBenvenutoIniziale = benvenuto;
-
-            // Scambio schermate pulito controllato da JS
-            document.getElementById('schermata-home').style.display = 'none';
-            document.getElementById('schermata-chat').style.display = 'block';
-            
-            // Imposta i testi corretti
-            document.getElementById('titolo-corrente').innerText = titolo;
-            document.getElementById('box-testo-risposta').innerText = benvenuto;
-            document.getElementById('ins-testo-utente').value = '';
-        }
-
-        // Funzione per tornare indietro alla lista
-        function chiudiSezione() {
-            document.getElementById('schermata-chat').style.display = 'none';
-            document.getElementById('schermata-home').style.display = 'grid';
-        }
-
-        // Gestore risposte IA della chat
-        function inviaMessaggioIa() {
-            const inputField = document.getElementById('ins-testo-utente');
-            const boxRisposta = document.getElementById('box-testo-risposta');
-            
-            const testo = inputField.value.trim();
-            if(testo === '') return;
-
-            const testoMinuscolo = testo.toLowerCase();
-            let rispostaGenerata = "✨ Ho preso nota della tua richiesta per questo profilo. Dimmi pure come desideri procedere per approfondire!";
-
-            // Risposte immediate basate sull'identità scelta
-            if (tipoProfiloAttivo === 'casalinga') {
+    });
+</script>
+</body>
+</html>
