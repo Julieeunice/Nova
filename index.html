@@ -1,127 +1,329 @@
 <!DOCTYPE html>
-<html lang="it" class="h-full">
+<html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nova - L'Assistente Universale</title>
-  <!-- Framework CSS per layout responsivi e stilizzazione avanzata -->
-  <script src="https://tailwindcss.com"></script>
-  <!-- Caricamento del font di sistema Inter da Google Fonts -->
-  <link rel="preconnect" href="https://googleapis.com">
-  <link rel="preconnect" href="https://gstatic.com" crossorigin>
-  <link href="https://googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0b0c10;
-    }
-    /* Personalizzazione estesa delle barre di scorrimento delle chat */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 5px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #0b0c10;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #21242c;
-      border-radius: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #2d313c;
-    }
-    /* Animazioni fluide di transizione tra i pannelli */
-    .view-transition {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova</title>
+    <style>
+        :root {
+            --bg-color: #0b111e;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --card-hover: #1f2937;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* --- SCHERMATA SELEZIONE PROFILI --- */
+        #selection-screen {
+            width: 100%;
+            max-width: 640px;
+            padding: 24px 16px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        .profile-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+        }
+
+        .profile-btn:hover {
+            background-color: var(--card-hover);
+            border-color: #374151;
+        }
+
+        .profile-btn.active {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 0 1px var(--accent-green);
+        }
+
+        .profile-btn .icon {
+            font-size: 2rem;
+        }
+
+        .profile-btn .label {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .search-container {
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .search-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .search-btn .icon {
+            font-size: 1.5rem;
+        }
+
+        .search-btn .text {
+            color: #3b82f6;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* --- SCHERMATA CHAT --- */
+        #chat-screen {
+            display: none; /* Nascosta all'inizio */
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .back-btn:hover {
+            color: var(--text-main);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .message.user {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            align-self: flex-end;
+        }
+
+        .message.nova {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            align-self: flex-start;
+        }
+
+        .chat-input-container {
+            border-top: 1px solid var(--card-border);
+            padding: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chat-input-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 6px 12px;
+            align-items: center;
+        }
+
+        .chat-input-wrapper input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 10px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .chat-input-wrapper button {
+            background: transparent;
+            border: none;
+            color: var(--accent-blue);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body class="text-white min-h-full flex flex-col items-center justify-start p-4 antialiased selection:bg-sky-500/30">
+<body>
 
-  <!-- BANNER DI CONFIGURAZIONE CHIAVE API -->
-  <div id="setup-api-banner" class="w-full max-w-md bg-zinc-900/90 border border-zinc-800 rounded-xl p-4 mb-6 text-xs flex flex-col gap-3 shadow-2xl transition-all duration-300">
-    <div class="flex items-start gap-2.5">
-      <span class="text-base">🔑</span>
-      <div class="flex-1">
-        <p class="text-zinc-200 font-semibold mb-1">Attivazione Motore Intelligenza Artificiale</p>
-        <p class="text-zinc-400 leading-normal">Per consentire a Nova di generare risposte reali, connetti il codice alle API pubbliche inserendo una chiave valida.</p>
-      </div>
+    <!-- Schermata Principale di Selezione -->
+    <div id="selection-screen">
+        <header>
+            <h1>★ Nova</h1>
+            <p>Scegli il tuo profilo o cerca quello perfetto per te</p>
+        </header>
+
+        <main class="grid-container">
+            <div class="profile-btn" onclick="selectProfile(this, 'Casalinga', '🏠')">
+                <span class="icon">🏠</span>
+                <span class="label">Casalinga</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Studente', '🎓')">
+                <span class="icon">🎓</span>
+                <span class="label">Studente</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Dottore', '🩺')">
+                <span class="icon">🩺</span>
+                <span class="label">Dottore</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Astronomo', '🚀')">
+                <span class="icon">🚀</span>
+                <span class="label">Astronomo</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Ricercatore', '🔬')">
+                <span class="icon">🔬</span>
+                <span class="label">Ricercatore</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Ingegnere & Dev', '💻')">
+                <span class="icon">💻</span>
+                <span class="label">Ingegnere & Dev</span>
+            </div>
+            <div class="profile-btn active" onclick="selectProfile(this, 'Chef & Cucina', '🧑‍🍳')">
+                <span class="icon">🧑‍🍳</span>
+                <span class="label">Chef & Cucina</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Artista & Creativo', '🎨')">
+                <span class="icon">🎨</span>
+                <span class="label">Artista & Creativo</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Avvocato', '⚖️')">
+                <span class="icon">⚖️</span>
+                <span class="label">Avvocato</span>
+            </div>
+            <div class="profile-btn" onclick="selectProfile(this, 'Insegnante', '🍎')">
+                <span class="icon">🍎</span>
+                <span class="label">Insegnante</span>
+            </div>
+        </main>
+
+        <div class="search-container">
+            <div class="search-btn" onclick="openSearchModal()">
+                <span class="icon">🔍</span>
+                <span class="text">Non trovi il tuo profilo? Cerca Altro...</span>
+            </div>
+        </div>
     </div>
-    <div class="flex gap-2">
-      <input id="api-key-field" type="password" placeholder="Incolla la tua Gemini API Key..." class="bg-[#14161d] border border-[#21242c] rounded-lg px-3 py-2 flex-1 outline-none text-white text-xs focus:border-zinc-500 transition-colors">
-      <button onclick="commitApiKeyConfiguration()" class="bg-white hover:bg-zinc-200 text-black font-semibold px-4 py-2 rounded-lg transition-all active:scale-95">Configura</button>
+
+    <!-- Schermata Chat (Inizialmente nascosta) -->
+    <div id="chat-screen">
+        <div class="chat-header">
+            <button class="back-btn" onclick="showSelectionScreen()">← I tuoi profili</button>
+            <h2 id="active-profile-title">★ Nova</h2>
+            <div style="width: 80px;"></div> <!-- Bilanciatore visivo space-between -->
+        </div>
+
+        <div class="chat-messages" id="chat-box">
+            <!-- I messaggi compariranno qui dentro -->
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <input type="text" id="user-input" placeholder="Scrivi un messaggio a Nova..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">➔</button>
+            </div>
+        </div>
     </div>
-    <p class="text-zinc-500">Ottieni un token di accesso gratuito effettuando il login su <a href="https://google.com" target="_blank" class="text-sky-400 hover:underline">Google AI Studio</a>.</p>
-  </div>
 
-  <!-- ========================================== -->
-  <!-- PANNELLO 1: SELEZIONE PROFILO (DASHBOARD) -->
-  <!-- ========================================== -->
-  <div id="selection-screen" class="w-full max-w-md flex flex-col pt-6 view-transition">
-    <header class="text-center mb-9">
-      <h1 class="text-3xl font-bold flex items-center justify-center gap-2 mb-2.5 tracking-wide">
-        <span class="text-xl text-yellow-500">★</span> Nova
-      </h1>
-      <p class="text-gray-400 text-xs font-normal tracking-normal">
-        Scegli il tuo profilo o cerca quello perfetto per te
-      </p>
-    </header>
+    <script>
+        let currentProfile = "Chef & Cucina";
+        let currentIcon = "🧑‍🍳";
 
-    <main class="grid grid-cols-2 gap-3.5 mb-4" id="profiles-container-grid">
-      <!-- I profili sono stati mappati con istruzioni di sistema contestuali (System Prompts) -->
-      <div onclick="launchChatSession('Casalinga', '🏠', 'Agisci come assistente domestico. Aiuta l\'utente nella gestione delle pulizie, nell\'economia familiare e nell\'organizzazione dei pasti.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">🏠</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Casalinga</span>
-      </div>
+        function selectProfile(element, profileName, icon) {
+            document.querySelectorAll('.profile-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            
+            currentProfile = profileName;
+            currentIcon = icon;
 
-      <div onclick="launchChatSession('Studente', '🎓', 'Agisci come tutor accademico. Aiuta l\'utente nello studio, elaborando riassunti analitici e spiegando formule o concetti complessi.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">🎓</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Studente</span>
-      </div>
+            // Avvia la transizione verso la chat dopo un breve ritardo per feedback visivo
+            setTimeout(() => {
+                showChatScreen();
+            }, 300);
+        }
 
-      <div onclick="launchChatSession('Dottore', '🩺', 'Agisci come un assistente medico virtuale informativo. Spiega concetti biologici, patologici o anatomici in modo chiaro ed esaustivo.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">🩺</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Dottore</span>
-      </div>
-
-      <div onclick="launchChatSession('Astronomo', '🚀', 'Agisci come astronomo e astrofisico. Spiega i fenomeni dell\'universo, la fisica stellare e l\'esplorazione spaziale con precisione.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">🚀</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Astronomo</span>
-      </div>
-
-      <div onclick="launchChatSession('Ricercatore', '🔬', 'Agisci come ricercatore scientifico di professione. Analizza le problematiche poste usando logica empirica, citando esperimenti o metodologie di analisi dati.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">🔬</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Ricercatore</span>
-      </div>
-
-      <div onclick="launchChatSession('Ingegnere & Dev', '💻', 'Agisci come ingegnere del software e sviluppatore senior. Fornisci codice sorgente ottimizzato, correggi bug e descrivi l\'architettura dei sistemi.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">💻</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Ingegnere & Dev</span>
-      </div>
-
-      <div onclick="launchChatSession('Chef & Cucina', '👨‍🍳', 'Agisci come chef di alta cucina. Suggerisci ricette, abbinamenti enogastronomici complessi, bilanciamento di sapori e tecniche avanzate di cottura.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">👨‍🍳</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Chef & Cucina</span>
-      </div>
-
-      <div onclick="launchChatSession('Artista & Creativo', '🎨', 'Agisci come art director e consulente creativo. Fornisci idee di design, soluzioni narrative, sceneggiature ed esplorazioni artistiche originali.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">🎨</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Artista & Creativo</span>
-      </div>
-
-      <div onclick="launchChatSession('Avvocato', '⚖️', 'Agisci come consulente legale. Analizza i quesiti dell\'utente basandoti sui principi generali del diritto, spiegando le normative vigenti.')" class="bg-[#14161d] border border-[#21242c] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:border-zinc-500 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 group-hover:scale-110 transition-transform">⚖️</span>
-        <span class="text-xs font-semibold text-gray-300 group-hover:text-white">Avvocato</span>
-      </div>
-
-      <!-- Insegnante (Selezionato con bordo verde smeraldo attivo) -->
-      <div onclick="launchChatSession('Insegnante', '🍎', 'Agisci come insegnante pedagogica. Rispondi alle domande dell\'utente strutturando spiegazioni semplici, adatte ad apprendere concetti ostici di qualsiasi natura.')" class="bg-[#0f1d19] border border-[#1b5e3a] rounded-xl flex flex-col items-center justify-center p-6 h-32 cursor-pointer hover:opacity-95 transition-all active:scale-95 group">
-        <span class="text-2xl mb-2 scale-110">🍎</span>
-        <span class="text-xs font-semibold text-white">Insegnante</span>
-      </div>
-    </main>
-
-    <footer>
-      <!-- Pulsante di ricerca inferiore con bordo tratteggiato e colore blu istituzionale -->
-      <div class="bg-[#14161d] border border-dashed border-[#2b3a4a] rounded-xl flex flex-col items-center justify-center p-4 h-28 cursor-pointer hover:border-sky-500 transition-all group">
-        <span class="text-xl mb-2 group-hover:animate-bounce">🔍</span>
